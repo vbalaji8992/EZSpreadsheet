@@ -34,8 +34,19 @@ namespace EZSpreadsheet
 
             Cell.CellValue = new CellValue(index.ToString());
             Cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
-
+            
             //Worksheet.SaveWorksheet();
+        }
+
+        public void SetValue(int value)
+        {
+            Cell.CellValue = new CellValue(value.ToString());
+            Cell.DataType = new EnumValue<CellValues>(CellValues.Number);
+        }
+
+        public void ApplyFormat()
+        {
+            Cell.StyleIndex = 1;
         }
 
     }

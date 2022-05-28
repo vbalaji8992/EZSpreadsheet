@@ -20,6 +20,7 @@ namespace EZSpreadsheet
         {
             WorkBook = workBook;
             SharedStringPart = sharedStringTablePart;
+            SharedStringPart.SharedStringTable = new SharedStringTable();
             StringTable = new Dictionary<string, int>();
         }
 

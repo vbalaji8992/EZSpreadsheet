@@ -26,7 +26,7 @@ namespace EZSpreadsheet
 
         public EZCell GetCell(string columnName, uint rowIndex)
         {
-            if (EZIndex.GetColumnIndex(columnName) > EZIndex.MaxColumnIndex)
+            if (EZIndex.GetColumnIndex(columnName) > EZIndex.MaxColumnIndex || rowIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("Invalid column name");
             }
@@ -53,7 +53,14 @@ namespace EZSpreadsheet
             string columnName = EZIndex.GetColumnName(columnIndex);
 
             return GetCell(columnName, rowIndex);
-        }                
+        }
+        
+        public EZCell GetCell(string cellReference)
+        {
+            var (columnName, rowIndex) = EZIndex.GetRowColumnIndex(cellReference);
+
+            return GetCell(columnName, rowIndex);
+        }
 
         private EZCell AddCell(string columnName, uint rowIndex)
         {

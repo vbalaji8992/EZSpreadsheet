@@ -6,7 +6,9 @@ var worksheet = workbook.AddSheet("EZ");
 
 for (uint i = 1; i < 10000; i++)
 {
-    worksheet.GetCell(i, 1).SetText(i);
+    worksheet.GetCell(i, 1).SetValue((int)i);
 }
+
+worksheet.GetCell(1,1).ApplyFormat();
 
 workbook.Save();
