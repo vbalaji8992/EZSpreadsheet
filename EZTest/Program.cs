@@ -9,6 +9,6 @@ for (uint i = 1; i < 10000; i++)
     worksheet.GetCell(i, 1).SetValue((int)i);
 }
 
-worksheet.GetCell(1,1).ApplyFormat();
+worksheet.GetCell(1,1).ApplyStyle(1);
 
 workbook.Save();
