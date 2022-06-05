@@ -4,11 +4,13 @@ using EZSpreadsheet;
 EZWorkbook workbook = new("EzBook.xlsx");
 var worksheet = workbook.AddSheet("EZ");
 
+List<uint> list = new List<uint>();
+
 for (uint i = 1; i < 10000; i++)
 {
-    worksheet.GetCell(i, 1).SetValue((int)i);
+    list.Add(i);
 }
 
-worksheet.GetCell(1,1).ApplyStyle(1);
+worksheet.InsertData(list, "C4");
 
 workbook.Save();

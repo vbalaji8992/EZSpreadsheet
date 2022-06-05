@@ -120,13 +120,20 @@ namespace EZSpreadsheet
             var startRowIndex = rowIndex;
             var startColumnIndex = EZIndex.GetColumnIndex(columnName);
 
+            uint currentRow = startRowIndex;
+
             if (typeof(T).IsValueType || typeof(T) == typeof(string))
             {
-                Console.WriteLine("Not object");
+                foreach (var value in data)
+                {
+                    GetCell(currentRow, startColumnIndex).SetText(value);
+                    currentRow++;
+                }
+
+                return;
             }
 
-            var props = typeof(T).GetProperties();
-            uint currentRow = startRowIndex;
+            var props = typeof(T).GetProperties();            
 
             foreach (var item in data)
             {

@@ -17,7 +17,7 @@ namespace EZSpreadsheet
 
         internal List<EZWorksheet> Worksheets { get; }
         internal EZSharedString SharedString { get; }
-        internal EZStylesheet Style { get; }
+        internal EZStylesheet StyleSheet { get; }
 
         public EZWorkbook(string filepath)
         {
@@ -36,7 +36,7 @@ namespace EZSpreadsheet
             SharedString = new EZSharedString(this, sharedStringPart);
 
             WorkbookStylesPart workbookStylesPart = spreadsheetDocument.WorkbookPart.AddNewPart<WorkbookStylesPart>();
-            Style = new EZStylesheet(this, workbookStylesPart);
+            StyleSheet = new EZStylesheet(this, workbookStylesPart);
         }
 
         public EZWorksheet AddSheet(string sheetName = null)
