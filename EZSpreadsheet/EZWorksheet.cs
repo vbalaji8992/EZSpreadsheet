@@ -114,26 +114,28 @@ namespace EZSpreadsheet
             }
         }
 
-        public void InsertData<T>(List<T> data, string cellReference)
-        {
+        public void InsertData<T>(List<T> data, string cellReference, bool includePropNameAsHeading = false)
+        {           
+            if (typeof(T).IsValueType || typeof(T) == typeof(string))
+            {
+                InsertValueType(data, cellReference);
+                return;
+            }
+
             var (columnName, rowIndex) = EZIndex.GetRowColumnIndex(cellReference);
             var startRowIndex = rowIndex;
             var startColumnIndex = EZIndex.GetColumnIndex(columnName);
 
             uint currentRow = startRowIndex;
 
-            if (typeof(T).IsValueType || typeof(T) == typeof(string))
+            var props = typeof(T).GetProperties();
+            
+            if (includePropNameAsHeading)
             {
-                foreach (var value in data)
-                {
-                    GetCell(currentRow, startColumnIndex).SetText(value);
-                    currentRow++;
-                }
-
-                return;
+                var propNames = props.Select(prop => prop.Name).ToList();
+                InsertValueType(propNames, cellReference, true);
+                currentRow++;
             }
-
-            var props = typeof(T).GetProperties();            
 
             foreach (var item in data)
             {
@@ -141,12 +143,33 @@ namespace EZSpreadsheet
 
                 foreach (var prop in props)
                 {
-                    var value = item.GetType().GetProperty(prop.Name).GetValue(item).ToString();
+                    var value = item?.GetType().GetProperty(prop.Name)?.GetValue(item)?.ToString();
                     GetCell(currentRow, currentColumn).SetText(value);
                     currentColumn++;
                 }
 
                 currentRow++;
+            }
+        }
+
+        public void InsertValueType<T>(List<T> data, string cellReference, bool transposeData = false)
+        {
+            var (columnName, rowIndex) = EZIndex.GetRowColumnIndex(cellReference);
+            var currentRow = rowIndex;
+            var currentColumn = EZIndex.GetColumnIndex(columnName);
+
+            foreach (var value in data)
+            {
+                GetCell(currentRow, currentColumn).SetText(value);
+
+                if (transposeData)
+                {
+                    currentColumn++;
+                }
+                else
+                {
+                    currentRow++;
+                }                
             }
         }
 

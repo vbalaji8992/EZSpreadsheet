@@ -4,16 +4,28 @@ using EZSpreadsheet;
 EZWorkbook workbook = new("EzBook.xlsx");
 var worksheet = workbook.AddSheet("EZ");
 
-List<uint> list = new List<uint>();
+List<Data> list = new List<Data>();
 
-for (uint i = 1; i < 100000; i++)
+for (uint i = 1; i < 1000; i++)
 {
-    list.Add(i);
+    list.Add(new Data()
+    {
+        Prop1 = new Random().Next(100),
+        Prop2 = new Random().Next(100),
+        Prop3 = new Random().Next(100)
+    });
 }
 
-worksheet.InsertData(list, "C4");
+worksheet.InsertData(list, "C4", true);
 //worksheet.GetCell(4, 1).SetText("a");
 //worksheet.GetCell(4, 3).ConvertToNumber();
 //worksheet.GetCell(1, 1).SetValue(1);
 
 workbook.Save();
+
+class Data
+{
+    public int Prop1 { get; set; }
+    public int Prop2 { get; set; }
+    public int Prop3 { get; set; }
+}
