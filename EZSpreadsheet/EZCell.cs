@@ -39,7 +39,7 @@ namespace EZSpreadsheet
         }
 
         public void SetValue(int value)
-        {
+        { 
             Cell.CellValue = new CellValue(value.ToString());
             Cell.DataType = new EnumValue<CellValues>(CellValues.Number);
         }
@@ -47,6 +47,31 @@ namespace EZSpreadsheet
         public void ApplyStyle(uint index)
         {
             Cell.StyleIndex = index;
+        }
+
+        public void ConvertToNumber()
+        {
+            if (Cell.DataType == null || Cell.CellValue == null || Cell.DataType == CellValues.Number)
+            {
+                return;
+            }
+
+            int indexInStringTable;
+            try
+            {
+                indexInStringTable = Convert.ToInt32(Cell.CellValue.InnerText);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Not possible to convert to a number");
+            }
+
+            var kvp = Worksheet.WorkBook.SharedString.StringTable.First(x => x.Value == indexInStringTable);
+
+            if (kvp.Key != null)
+            {
+                SetValue(Convert.ToInt32(kvp.Key));
+            }
         }
 
     }

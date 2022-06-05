@@ -13,7 +13,7 @@ namespace EZSpreadsheet
         public Worksheet Worksheet { get; set; }
         public Sheet Sheet { get; set; }
         public SheetData SheetData { get; set; }
-        public Dictionary<uint, List<EZCell>> CellsKvp { get; }
+        public Dictionary<uint, List<EZCell>> CellListByRowIndex { get; }
 
         public EZWorksheet(Worksheet worksheet, Sheet sheet, EZWorkbook workBook)
         {
@@ -21,7 +21,7 @@ namespace EZSpreadsheet
             Worksheet = worksheet;
             Sheet = sheet;
             SheetData = worksheet.GetFirstChild<SheetData>();
-            CellsKvp = new Dictionary<uint, List<EZCell>>();
+            CellListByRowIndex = new Dictionary<uint, List<EZCell>>();
         }
 
         public EZCell GetCell(string columnName, uint rowIndex)
@@ -33,9 +33,9 @@ namespace EZSpreadsheet
 
             EZCell excelCell = null;
 
-            if (CellsKvp.ContainsKey(rowIndex))
+            if (CellListByRowIndex.ContainsKey(rowIndex))
             {
-                excelCell = CellsKvp[rowIndex].Where(x => x.ColumnName == columnName && x.RowIndex == rowIndex).FirstOrDefault();
+                excelCell = CellListByRowIndex[rowIndex].Where(x => x.ColumnName == columnName && x.RowIndex == rowIndex).FirstOrDefault();
             }
 
             if (excelCell != null)
@@ -66,7 +66,7 @@ namespace EZSpreadsheet
         {
             string cellReference = columnName + rowIndex;
 
-            if (!CellsKvp.ContainsKey(rowIndex))
+            if (!CellListByRowIndex.ContainsKey(rowIndex))
             {
                 Row row = new Row() { RowIndex = rowIndex };
                 SheetData.Append(row);
@@ -75,13 +75,13 @@ namespace EZSpreadsheet
                 row.Append(newCell);
 
                 EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
-                CellsKvp.Add(rowIndex, new List<EZCell> { excelCell });
+                CellListByRowIndex.Add(rowIndex, new List<EZCell> { excelCell });
 
                 return excelCell;
             }
             else
             {
-                var cellsWithRowIndex = CellsKvp[rowIndex];
+                var cellsWithRowIndex = CellListByRowIndex[rowIndex];
                 EZCell refCell = null;
 
                 foreach (var cell in cellsWithRowIndex)
@@ -108,7 +108,7 @@ namespace EZSpreadsheet
                 }
 
                 EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
-                CellsKvp[rowIndex].Add(excelCell);
+                CellListByRowIndex[rowIndex].Add(excelCell);
 
                 return excelCell;
             }
@@ -148,6 +148,76 @@ namespace EZSpreadsheet
 
                 currentRow++;
             }
+        }
+
+        public uint GetFirstRowIndex()
+        {
+            Row? firstRow = SheetData.FirstChild as Row;
+
+            return firstRow?.RowIndex ?? throw new Exception("Empty sheet");
+        }
+
+        public uint GetLastRowIndex()
+        {
+            Row? lastRow = SheetData.LastChild as Row;
+
+            return lastRow?.RowIndex ?? throw new Exception("Empty sheet");
+        }
+
+        public uint GetFirstColumnIndex()
+        {
+            uint firstColumnIndex = EZIndex.MaxColumnIndex;
+
+            foreach (var kvp in CellListByRowIndex)
+            {               
+                foreach(var cell in kvp.Value)
+                {
+                    if (cell.ColumnIndex < firstColumnIndex)
+                    {
+                        firstColumnIndex = cell.ColumnIndex;
+                    }
+                }
+            }
+
+            if(firstColumnIndex == EZIndex.MaxColumnIndex)
+            {
+                throw new Exception("Empty sheet");
+            }
+
+            return firstColumnIndex;
+        }
+
+        public uint GetLastColumnIndex()
+        {
+            uint lastColumnIndex = 0;
+
+            foreach (var kvp in CellListByRowIndex)
+            {
+                foreach (var cell in kvp.Value)
+                {
+                    if (cell.ColumnIndex > lastColumnIndex)
+                    {
+                        lastColumnIndex = cell.ColumnIndex;
+                    }
+                }
+            }
+
+            if (lastColumnIndex == 0)
+            {
+                throw new Exception("Empty sheet");
+            }
+
+            return lastColumnIndex;
+        }
+
+        public string GetFirstColumnName()
+        {
+            return EZIndex.GetColumnName(GetFirstColumnIndex());
+        }
+
+        public string GetLastColumnName()
+        {
+            return EZIndex.GetColumnName(GetLastColumnIndex());
         }
 
         public void SaveWorksheet()
