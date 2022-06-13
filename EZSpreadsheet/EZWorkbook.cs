@@ -25,7 +25,7 @@ namespace EZSpreadsheet
             spreadsheetDocument = SpreadsheetDocument.Create(filepath, SpreadsheetDocumentType.Workbook);
 
             spreadsheetDocument.AddWorkbookPart();
-            spreadsheetDocument.WorkbookPart.Workbook = new Workbook();
+            spreadsheetDocument.WorkbookPart!.Workbook = new Workbook();
 
             sheets = spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
 
@@ -39,9 +39,9 @@ namespace EZSpreadsheet
             StyleSheet = new EZStylesheet(this, workbookStylesPart);
         }
 
-        public EZWorksheet AddSheet(string sheetName = null)
+        public EZWorksheet AddSheet(string? sheetName = null)
         {
-            WorksheetPart worksheetPart = spreadsheetDocument.WorkbookPart.AddNewPart<WorksheetPart>();
+            WorksheetPart worksheetPart = spreadsheetDocument.WorkbookPart!.AddNewPart<WorksheetPart>();
             SheetData sheetData = new SheetData();
             worksheetPart.Worksheet = new Worksheet(sheetData);
 
@@ -64,12 +64,12 @@ namespace EZSpreadsheet
 
         public void Save()
         {
-            spreadsheetDocument.WorkbookPart.Workbook.Save();
+            spreadsheetDocument.WorkbookPart?.Workbook.Save();
 
             spreadsheetDocument.Close();
         }
 
-        public EZWorksheet GetSheet(string sheetName)
+        public EZWorksheet? GetSheet(string sheetName)
         {
             return Worksheets.Where(x => x.Sheet.Name == sheetName).FirstOrDefault();
         }
