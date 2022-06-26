@@ -21,7 +21,6 @@ namespace EZSpreadsheet
 
         public EZWorkbook(string filepath)
         {
-
             spreadsheetDocument = SpreadsheetDocument.Create(filepath, SpreadsheetDocumentType.Workbook);
 
             spreadsheetDocument.AddWorkbookPart();
@@ -41,6 +40,10 @@ namespace EZSpreadsheet
 
         public EZWorksheet AddSheet(string? sheetName = null)
         {
+            if (sheetName != null && GetSheet(sheetName) != null)
+            {
+                throw new Exception("Sheet already exists!");
+            }
             WorksheetPart worksheetPart = spreadsheetDocument.WorkbookPart!.AddNewPart<WorksheetPart>();
             SheetData sheetData = new SheetData();
             worksheetPart.Worksheet = new Worksheet(sheetData);
@@ -74,5 +77,9 @@ namespace EZSpreadsheet
             return Worksheets.Where(x => x.Sheet.Name == sheetName).FirstOrDefault();
         }
 
+        public int GetSheetCount()
+        {
+            return Worksheets.Count();
+        }
     }
 }
