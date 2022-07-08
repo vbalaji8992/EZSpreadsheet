@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,31 @@ namespace EZSpreadsheet
 {
     public class EZWorksheet
     {
-        public EZWorkbook WorkBook { get; }
-        public Worksheet Worksheet { get; set; }
-        public Sheet Sheet { get; set; }
-        public SheetData SheetData { get; set; }
-        public Dictionary<uint, List<EZCell>> CellListByRowIndex { get; }
+        internal EZWorkbook WorkBook { get; }
+        internal Worksheet Worksheet { get; set; }
+        internal Sheet Sheet { get; set; }
+        internal SheetData SheetData { get; set; }
+        internal Dictionary<uint, List<EZCell>> CellListByRowIndex { get; }
 
-        public EZWorksheet(Worksheet worksheet, Sheet sheet, EZWorkbook workBook)
+        public EZWorksheet(EZWorkbook workBook, string? sheetName)
         {
+            WorksheetPart worksheetPart = workBook.SpreadsheetDocument.WorkbookPart!.AddNewPart<WorksheetPart>();
+            SheetData sheetData = new SheetData();
+            worksheetPart.Worksheet = new Worksheet(sheetData);
+
+            Sheet sheet = new Sheet()
+            {
+                Id = workBook.SpreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
+                SheetId = workBook.NextAvailableSheetId,
+                Name = (string.IsNullOrEmpty(sheetName)) ? "Sheet" + workBook.NextAvailableSheetId : sheetName
+            };
+
+            workBook.Sheets.Append(sheet);
+
             WorkBook = workBook;
-            Worksheet = worksheet;
+            Worksheet = worksheetPart.Worksheet;
             Sheet = sheet;
-            SheetData = worksheet.GetFirstChild<SheetData>();
+            SheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
             CellListByRowIndex = new Dictionary<uint, List<EZCell>>();
         }
 
@@ -31,7 +45,7 @@ namespace EZSpreadsheet
                 throw new ArgumentOutOfRangeException("Invalid column name");
             }
 
-            EZCell excelCell = null;
+            EZCell? excelCell = null;
 
             if (CellListByRowIndex.ContainsKey(rowIndex))
             {
@@ -82,7 +96,7 @@ namespace EZSpreadsheet
             else
             {
                 var cellsWithRowIndex = CellListByRowIndex[rowIndex];
-                EZCell refCell = null;
+                EZCell? refCell = null;
 
                 foreach (var cell in cellsWithRowIndex)
                 {
@@ -241,6 +255,11 @@ namespace EZSpreadsheet
         public string GetLastColumnName()
         {
             return EZIndex.GetColumnName(GetLastColumnIndex());
+        }
+
+        public string GetSheetName()
+        {
+            return Sheet.Name!;
         }
 
         public void SaveWorksheet()

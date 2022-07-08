@@ -22,7 +22,7 @@ namespace EZSpreadsheet
             }
             else
             {
-                throw new ArgumentException("Invalid cell reference");
+                throw new ArgumentOutOfRangeException("Invalid cell reference");
             }
         }
 

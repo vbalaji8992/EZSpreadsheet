@@ -11,30 +11,29 @@ namespace EZSpreadsheet
 {
     public class EZWorkbook
     {
-        private readonly SpreadsheetDocument spreadsheetDocument;
-        private readonly Sheets sheets;
-        private uint nextAvailableSheetId = 1;
-
+        internal SpreadsheetDocument SpreadsheetDocument { get; }
+        internal Sheets Sheets { get; }
         internal List<EZWorksheet> Worksheets { get; }
         internal EZSharedString SharedString { get; }
         internal EZStylesheet StyleSheet { get; }
+        internal uint NextAvailableSheetId { get; private set; } = 1;
 
         public EZWorkbook(string filepath)
         {
-            spreadsheetDocument = SpreadsheetDocument.Create(filepath, SpreadsheetDocumentType.Workbook);
+            SpreadsheetDocument = SpreadsheetDocument.Create(filepath, SpreadsheetDocumentType.Workbook);
 
-            spreadsheetDocument.AddWorkbookPart();
-            spreadsheetDocument.WorkbookPart!.Workbook = new Workbook();
+            SpreadsheetDocument.AddWorkbookPart();
+            SpreadsheetDocument.WorkbookPart!.Workbook = new Workbook();
 
-            sheets = spreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
+            Sheets = SpreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
 
             Worksheets = new List<EZWorksheet>();
             //AddSheet();
 
-            SharedStringTablePart sharedStringPart = spreadsheetDocument.WorkbookPart.AddNewPart<SharedStringTablePart>();
+            SharedStringTablePart sharedStringPart = SpreadsheetDocument.WorkbookPart.AddNewPart<SharedStringTablePart>();
             SharedString = new EZSharedString(this, sharedStringPart);
 
-            WorkbookStylesPart workbookStylesPart = spreadsheetDocument.WorkbookPart.AddNewPart<WorkbookStylesPart>();
+            WorkbookStylesPart workbookStylesPart = SpreadsheetDocument.WorkbookPart.AddNewPart<WorkbookStylesPart>();
             StyleSheet = new EZStylesheet(this, workbookStylesPart);
         }
 
@@ -44,32 +43,20 @@ namespace EZSpreadsheet
             {
                 throw new Exception("Sheet already exists!");
             }
-            WorksheetPart worksheetPart = spreadsheetDocument.WorkbookPart!.AddNewPart<WorksheetPart>();
-            SheetData sheetData = new SheetData();
-            worksheetPart.Worksheet = new Worksheet(sheetData);
 
-            Sheet sheet = new Sheet()
-            {
-                Id = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
-                SheetId = nextAvailableSheetId,
-                Name = (string.IsNullOrEmpty(sheetName)) ? "Sheet" + nextAvailableSheetId : sheetName
-            };
-
-            sheets.Append(sheet);
-
-            EZWorksheet addedSheet = new EZWorksheet(worksheetPart.Worksheet, sheet, this);
+            EZWorksheet addedSheet = new EZWorksheet(this, sheetName);
             Worksheets.Add(addedSheet);
 
-            nextAvailableSheetId++;
+            NextAvailableSheetId++;
 
             return addedSheet;
         }
 
         public void Save()
         {
-            spreadsheetDocument.WorkbookPart?.Workbook.Save();
+            SpreadsheetDocument.WorkbookPart?.Workbook.Save();
 
-            spreadsheetDocument.Close();
+            SpreadsheetDocument.Close();
         }
 
         public EZWorksheet? GetSheet(string sheetName)

@@ -49,15 +49,6 @@ namespace EZSpreadsheet.Tests
         }
 
         [Fact]
-        public void ShouldGetSheetByNameIfExists()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldGetSheetByNameIfExists.xlsx");
-            workbook.AddSheet("NewSheet");
-            var sheet = workbook.GetSheet("NewSheet");
-            Assert.Equal("NewSheet", sheet?.Sheet.Name);
-        }
-
-        [Fact]
         public void ShouldReturnNullIfSheetDoesNotExist()
         {
             var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldReturnNullIfSheetDoesNotExist.xlsx");
