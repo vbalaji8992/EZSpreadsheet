@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,10 +41,9 @@ namespace EZSpreadsheet
 
         public EZCell GetCell(string columnName, uint rowIndex)
         {
-            if (EZIndex.GetColumnIndex(columnName) > EZIndex.MaxColumnIndex || rowIndex < 1)
-            {
-                throw new ArgumentOutOfRangeException("Invalid column name");
-            }
+            columnName = columnName.ToUpper();
+
+            EZIndex.CheckForInvalidIndex(columnName, rowIndex);
 
             EZCell? excelCell = null;
 
@@ -82,8 +82,19 @@ namespace EZSpreadsheet
 
             if (!CellListByRowIndex.ContainsKey(rowIndex))
             {
-                Row row = new Row() { RowIndex = rowIndex };
-                SheetData.Append(row);
+                Row row = new Row() { RowIndex = rowIndex };                
+
+                var presentRows = SheetData.ChildElements;
+                var refRow = presentRows?.Select(x => x as Row).Where(x => x?.RowIndex! > rowIndex).OrderBy(x => x?.RowIndex).FirstOrDefault();
+
+                if (refRow != null)
+                {
+                    SheetData.InsertBefore(row, refRow);
+                }
+                else
+                {
+                    SheetData.Append(row);
+                }
 
                 Cell newCell = new Cell() { CellReference = cellReference };
                 row.Append(newCell);
@@ -166,7 +177,7 @@ namespace EZSpreadsheet
             }
         }
 
-        public void InsertValueType<T>(List<T> data, string cellReference, bool transposeData = false)
+        internal void InsertValueType<T>(List<T> data, string cellReference, bool transposeData = false)
         {
             var (columnName, rowIndex) = EZIndex.GetRowColumnIndex(cellReference);
             var currentRow = rowIndex;

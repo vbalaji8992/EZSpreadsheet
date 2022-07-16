@@ -9,26 +9,32 @@ namespace EZSpreadsheet
 {
     class EZIndex
     {
-        public const int MaxColumnIndex = 16384;
-        public const uint AsciiOffset = 64;
+        internal const int MaxColumnIndex = 16384;
+        internal const uint AsciiOffset = 64;
 
-        public static (string columnName, uint rowIndex) GetRowColumnIndex(string cellReference)
+        internal static (string columnName, uint rowIndex) GetRowColumnIndex(string cellReference)
         {
-            if (Regex.IsMatch(cellReference, "^[a-zA-Z]{1,2}[0-9]+$"))
+            string columnName;
+            uint rowIndex;
+
+            if (Regex.IsMatch(cellReference, "^[a-zA-Z]{1,2}[1-9]+$"))
             {
-                string columnName = Regex.Replace(cellReference, @"[\d]", "");
-                uint rowIndex = Convert.ToUInt32(Regex.Replace(cellReference, "[a-zA-Z]", ""));
-                return (columnName, rowIndex);
+                columnName = Regex.Replace(cellReference, @"[\d]", "").ToUpper();
+                rowIndex = Convert.ToUInt32(Regex.Replace(cellReference, "[a-zA-Z]", ""));                
             }
             else
             {
                 throw new ArgumentOutOfRangeException("Invalid cell reference");
             }
+
+            CheckForInvalidIndex(columnName, rowIndex);
+
+            return (columnName, rowIndex);
         }
 
-        public static string GetColumnName(uint columnIndex)
+        internal static string GetColumnName(uint columnIndex)
         {
-            if (columnIndex > MaxColumnIndex)
+            if (columnIndex < 1 || columnIndex > MaxColumnIndex)
             {
                 throw new ArgumentOutOfRangeException("Invalid column index");
             }
@@ -52,14 +58,34 @@ namespace EZSpreadsheet
             return GetColumnName(num) + ((char)(rem + AsciiOffset)).ToString();
         }
 
-        public static uint GetColumnIndex(string columnName)
+        internal static uint GetColumnIndex(string columnName)
         {
+            if (string.IsNullOrEmpty(columnName))
+            {
+                throw new ArgumentOutOfRangeException("Invalid column name");
+            }
+
             if (columnName.Length == 1)
             {
                 return columnName.ToUpper()[0] - AsciiOffset;
             }
 
             return GetColumnIndex(columnName.Substring(0, columnName.Length - 1)) * 26 + (columnName.ToUpper()[columnName.Length - 1] - AsciiOffset);
+        }
+
+        internal static void CheckForInvalidIndex(string columnName, uint rowIndex)
+        {
+            uint columnIndex = GetColumnIndex(columnName);
+
+            if (columnIndex > MaxColumnIndex)
+            {
+                throw new ArgumentOutOfRangeException("Invalid column name");
+            }
+
+            if (rowIndex < 1)
+            {
+                throw new ArgumentOutOfRangeException("Invalid row index");
+            }
         }
     }
 }

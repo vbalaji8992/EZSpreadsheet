@@ -6,7 +6,7 @@ var worksheet = workbook.AddSheet("EZ");
 
 List<Data> list = new List<Data>();
 
-for (uint i = 1; i < 1000; i++)
+for (uint i = 1; i < 10; i++)
 {
     list.Add(new Data()
     {
@@ -16,8 +16,8 @@ for (uint i = 1; i < 1000; i++)
     });
 }
 
-worksheet.InsertData(list, "C4", true);
-//worksheet.GetCell(4, 1).SetText("a");
+worksheet.InsertData(list, "e4", true);
+worksheet.GetCell("a", 1).SetText("a");
 //worksheet.GetCell(4, 3).ConvertToNumber();
 //worksheet.GetCell(1, 1).SetValue(1);
 

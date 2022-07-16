@@ -32,6 +32,8 @@ namespace EZSpreadsheet.Tests
             var worksheet = new EZWorksheet(workbook, "sheet1");
 
             Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell("AAAAA", 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell(1, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell(1, 100000));
         }
 
         [Fact]
@@ -55,6 +57,43 @@ namespace EZSpreadsheet.Tests
             var cell = worksheet.GetCell("A", 1);
 
             Assert.NotNull(cell);
+        }
+
+        [Fact]
+        public void ShouldGetCellForGivenRowAndColumnIndex()
+        {
+            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldGetCellForGivenRowAndColumnIndex.xlsx");
+            var worksheet = new EZWorksheet(workbook, "sheet1");
+
+            var cell = worksheet.GetCell(1, 1);
+
+            Assert.NotNull(cell);
+        }
+
+        [Fact]
+        public void ShouldGetCellForGivenCellReference()
+        {
+            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldGetCellForGivenCellReference.xlsx");
+            var worksheet = new EZWorksheet(workbook, "sheet1");
+
+            var cell = worksheet.GetCell("A1");
+
+            Assert.NotNull(cell);
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionForInvalidCellReference()
+        {
+            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldThrowExceptionForInvalidCellReference.xlsx");
+            var worksheet = new EZWorksheet(workbook, "sheet1");
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell(""));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell("A"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell("1"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell("1A"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell("AAAA1"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell("A-1"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => worksheet.GetCell("A0"));
         }
     }
 }
