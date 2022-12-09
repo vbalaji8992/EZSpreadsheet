@@ -78,65 +78,77 @@ namespace EZSpreadsheet
 
         private EZCell AddCell(string columnName, uint rowIndex)
         {
-            string cellReference = columnName + rowIndex;
-
             if (!CellListByRowIndex.ContainsKey(rowIndex))
             {
-                Row row = new Row() { RowIndex = rowIndex };                
-
-                var presentRows = SheetData.ChildElements;
-                var refRow = presentRows?.Select(x => x as Row).Where(x => x?.RowIndex! > rowIndex).OrderBy(x => x?.RowIndex).FirstOrDefault();
-
-                if (refRow != null)
-                {
-                    SheetData.InsertBefore(row, refRow);
-                }
-                else
-                {
-                    SheetData.Append(row);
-                }
-
-                Cell newCell = new Cell() { CellReference = cellReference };
-                row.Append(newCell);
-
-                EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
-                CellListByRowIndex.Add(rowIndex, new List<EZCell> { excelCell });
-
-                return excelCell;
+                return AddRowAndAppendCell(columnName, rowIndex);
             }
             else
             {
-                var cellsWithRowIndex = CellListByRowIndex[rowIndex];
-                EZCell? refCell = null;
-
-                foreach (var cell in cellsWithRowIndex)
-                {
-                    if (string.Compare(cell.CellReference, cellReference, true) > 0)
-                    {
-                        refCell = cell;
-                        break;
-                    }
-                }
-
-                Row row;
-                Cell newCell = new Cell() { CellReference = cellReference };
-
-                if (refCell == null)
-                {
-                    row = cellsWithRowIndex.First().Row;
-                    row.Append(newCell);
-                }
-                else
-                {
-                    row = refCell.Row;
-                    row.InsertBefore(newCell, refCell.Cell);
-                }
-
-                EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
-                CellListByRowIndex[rowIndex].Add(excelCell);
-
-                return excelCell;
+                return AppendCellToRow(columnName, rowIndex);
             }
+        }
+
+        private EZCell AppendCellToRow(string columnName, uint rowIndex)
+        {
+            string cellReference = columnName + rowIndex;
+
+            var cellsWithRowIndex = CellListByRowIndex[rowIndex];
+            EZCell? refCell = null;
+
+            foreach (var cell in cellsWithRowIndex)
+            {
+                if (string.Compare(cell.CellReference, cellReference, true) > 0)
+                {
+                    refCell = cell;
+                    break;
+                }
+            }
+
+            Row row;
+            Cell newCell = new Cell() { CellReference = cellReference };
+
+            if (refCell == null)
+            {
+                row = cellsWithRowIndex.First().Row;
+                row.Append(newCell);
+            }
+            else
+            {
+                row = refCell.Row;
+                row.InsertBefore(newCell, refCell.Cell);
+            }
+
+            EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
+            CellListByRowIndex[rowIndex].Add(excelCell);
+
+            return excelCell;
+        }
+
+        private EZCell AddRowAndAppendCell(string columnName, uint rowIndex)
+        {
+            string cellReference = columnName + rowIndex;
+
+            Row row = new Row() { RowIndex = rowIndex };
+
+            var presentRows = SheetData.ChildElements;
+            var refRow = presentRows?.Select(x => x as Row).Where(x => x?.RowIndex! > rowIndex).OrderBy(x => x?.RowIndex).FirstOrDefault();
+
+            if (refRow != null)
+            {
+                SheetData.InsertBefore(row, refRow);
+            }
+            else
+            {
+                SheetData.Append(row);
+            }
+
+            Cell newCell = new Cell() { CellReference = cellReference };
+            row.Append(newCell);
+
+            EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
+            CellListByRowIndex.Add(rowIndex, new List<EZCell> { excelCell });
+
+            return excelCell;
         }
 
         public void InsertData<T>(List<T> data, string cellReference, bool includePropNameAsHeading = false)

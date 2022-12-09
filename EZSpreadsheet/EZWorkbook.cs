@@ -28,7 +28,6 @@ namespace EZSpreadsheet
             Sheets = SpreadsheetDocument.WorkbookPart.Workbook.AppendChild<Sheets>(new Sheets());
 
             Worksheets = new List<EZWorksheet>();
-            //AddSheet();
 
             SharedStringTablePart sharedStringPart = SpreadsheetDocument.WorkbookPart.AddNewPart<SharedStringTablePart>();
             SharedString = new EZSharedString(this, sharedStringPart);
