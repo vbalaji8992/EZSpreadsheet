@@ -74,5 +74,67 @@ namespace EZSpreadsheet
             }
         }
 
+        public EZRange? InsertData<T>(List<T> data, bool includePropNameAsHeading = false)
+        {
+            if (typeof(T).IsValueType || typeof(T) == typeof(string))
+            {
+                return InsertValueType(data);                
+            }
+
+            uint currentRow = RowIndex;
+
+            var props = typeof(T).GetProperties();
+
+            if (includePropNameAsHeading)
+            {
+                var propNames = props.Select(prop => prop.Name).ToList();
+                InsertValueType(propNames, true);
+                currentRow++;
+            }
+
+            var firstCell = Worksheet.GetCell(currentRow, ColumnIndex);
+            var currentCell = firstCell;       
+
+            foreach (var item in data)
+            {
+                uint currentColumn = ColumnIndex;
+
+                foreach (var prop in props)
+                {
+                    var value = item?.GetType().GetProperty(prop.Name)?.GetValue(item)?.ToString() ?? "";
+                    currentCell = Worksheet.GetCell(currentRow, currentColumn);
+                    currentCell.SetText(value);
+                    currentColumn++;
+                }
+
+                currentRow++;
+            }
+
+            return new EZRange(Worksheet, firstCell, currentCell);
+        }
+
+        internal EZRange InsertValueType<T>(List<T> data, bool transposeData = false)
+        {
+            var currentRow = RowIndex;
+            var currentColumn = ColumnIndex;
+            var currentCell = this;
+
+            foreach (var value in data)
+            {
+                currentCell = Worksheet.GetCell(currentRow, currentColumn);
+                currentCell.SetText(value);
+
+                if (transposeData)
+                {
+                    currentColumn++;
+                }
+                else
+                {
+                    currentRow++;
+                }
+            }
+
+            return new EZRange(Worksheet, this, currentCell);
+        }
     }
 }

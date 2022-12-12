@@ -151,65 +151,6 @@ namespace EZSpreadsheet
             return excelCell;
         }
 
-        public void InsertData<T>(List<T> data, string cellReference, bool includePropNameAsHeading = false)
-        {           
-            if (typeof(T).IsValueType || typeof(T) == typeof(string))
-            {
-                InsertValueType(data, cellReference);
-                return;
-            }
-
-            var (columnName, rowIndex) = EZIndex.GetRowColumnIndex(cellReference);
-            var startRowIndex = rowIndex;
-            var startColumnIndex = EZIndex.GetColumnIndex(columnName);
-
-            uint currentRow = startRowIndex;
-
-            var props = typeof(T).GetProperties();
-            
-            if (includePropNameAsHeading)
-            {
-                var propNames = props.Select(prop => prop.Name).ToList();
-                InsertValueType(propNames, cellReference, true);
-                currentRow++;
-            }
-
-            foreach (var item in data)
-            {
-                uint currentColumn = startColumnIndex;
-
-                foreach (var prop in props)
-                {
-                    var value = item?.GetType().GetProperty(prop.Name)?.GetValue(item)?.ToString();
-                    GetCell(currentRow, currentColumn).SetText(value);
-                    currentColumn++;
-                }
-
-                currentRow++;
-            }
-        }
-
-        internal void InsertValueType<T>(List<T> data, string cellReference, bool transposeData = false)
-        {
-            var (columnName, rowIndex) = EZIndex.GetRowColumnIndex(cellReference);
-            var currentRow = rowIndex;
-            var currentColumn = EZIndex.GetColumnIndex(columnName);
-
-            foreach (var value in data)
-            {
-                GetCell(currentRow, currentColumn).SetText(value);
-
-                if (transposeData)
-                {
-                    currentColumn++;
-                }
-                else
-                {
-                    currentRow++;
-                }                
-            }
-        }
-
         public uint GetFirstRowIndex()
         {
             Row? firstRow = SheetData.FirstChild as Row;
