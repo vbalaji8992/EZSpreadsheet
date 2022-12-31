@@ -9,14 +9,28 @@ namespace EZSpreadsheet
     public class EZRange
     {
         public EZWorksheet Worksheet { get; }
-        public EZCell StartCell { get; }
-        public EZCell EndCell { get; }
+        public List<EZCell> CellList { get; }
 
-        public EZRange(EZWorksheet worksheet, EZCell startCell, EZCell endCell)
+        public EZRange(EZWorksheet worksheet, List<EZCell> cellList)
         {
             Worksheet = worksheet;
-            StartCell = startCell;
-            EndCell = endCell;
-        }      
+            CellList = cellList;
+        }
+
+        public void ConvertToNumber()
+        {
+            foreach(var cell in CellList)
+            {
+                cell.ConvertToNumber();
+            }
+        }
+
+        public void SetFontStyle(EZFontStyle fontStyle)
+        {
+            foreach (var cell in CellList)
+            {
+                cell.SetFontStyle(fontStyle);
+            }
+        }
     }
 }

@@ -88,12 +88,12 @@ namespace EZSpreadsheet
             if (includePropNameAsHeading)
             {
                 var propNames = props.Select(prop => prop.Name).ToList();
-                InsertValueType(propNames, true);
+                var range = InsertValueType(propNames, true);
+                range.SetFontStyle(new EZFontStyle() { IsBold = true });
                 currentRow++;
             }
-
-            var firstCell = Worksheet.GetCell(currentRow, ColumnIndex);
-            var currentCell = firstCell;       
+            
+            var cellList = new List<EZCell>();
 
             foreach (var item in data)
             {
@@ -102,27 +102,30 @@ namespace EZSpreadsheet
                 foreach (var prop in props)
                 {
                     var value = item?.GetType().GetProperty(prop.Name)?.GetValue(item)?.ToString() ?? "";
-                    currentCell = Worksheet.GetCell(currentRow, currentColumn);
+                    var currentCell = Worksheet.GetCell(currentRow, currentColumn);
                     currentCell.SetText(value);
+                    cellList.Add(currentCell);
                     currentColumn++;
                 }
 
                 currentRow++;
             }
 
-            return new EZRange(Worksheet, firstCell, currentCell);
+            return new EZRange(Worksheet, cellList);
         }
 
         internal EZRange InsertValueType<T>(List<T> data, bool transposeData = false)
         {
             var currentRow = RowIndex;
             var currentColumn = ColumnIndex;
-            var currentCell = this;
+
+            var cellList = new List<EZCell>();
 
             foreach (var value in data)
             {
-                currentCell = Worksheet.GetCell(currentRow, currentColumn);
+                var currentCell = Worksheet.GetCell(currentRow, currentColumn);
                 currentCell.SetText(value);
+                cellList.Add(currentCell);
 
                 if (transposeData)
                 {
@@ -134,7 +137,14 @@ namespace EZSpreadsheet
                 }
             }
 
-            return new EZRange(Worksheet, this, currentCell);
+            return new EZRange(Worksheet, cellList);
+        }
+
+        public void SetFontStyle(EZFontStyle fontStyle)
+        {
+            var fontId = Worksheet.WorkBook.StyleSheet.AppendFontStyle(fontStyle);
+            var styleIndex = Worksheet.WorkBook.StyleSheet.AppendCellFormat(fontId);
+            ApplyStyle(styleIndex);
         }
     }
 }
