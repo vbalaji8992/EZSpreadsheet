@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EZSpreadsheet.StyleEnums
 {
-    public enum EZFontColor: uint
+    public enum EZColor: uint
     {
         Black = 0,
         White = 1,

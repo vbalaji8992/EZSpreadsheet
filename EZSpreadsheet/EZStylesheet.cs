@@ -14,8 +14,8 @@ namespace EZSpreadsheet
     {
         EZWorkbook WorkBook { get; }
         WorkbookStylesPart WorkbookStylesPart { get; }
-        Dictionary<EZFontStyle, uint> FontIndices { get; }
-        Dictionary<uint, uint> StyleIndices { get; }
+        List<EZCellStyle> CellStyleList { get; }
+        Dictionary<EZCellStyle, uint> CellStyleIndex { get; }
 
         private Fonts fonts;
         private Fills fills;
@@ -27,8 +27,8 @@ namespace EZSpreadsheet
             WorkBook = workBook;
             WorkbookStylesPart = workbookStylesPart;
             WorkbookStylesPart.Stylesheet = new Stylesheet();
-            FontIndices = new Dictionary<EZFontStyle, uint>();
-            StyleIndices = new Dictionary<uint, uint>();
+            CellStyleList = new List<EZCellStyle>();
+            CellStyleIndex = new Dictionary<EZCellStyle, uint>();
             fonts = new Fonts();
             fills = new Fills();
             borders = new Borders();
@@ -38,7 +38,7 @@ namespace EZSpreadsheet
 
         void AppendBasicStyles()
         {           
-            var fontId = AppendFontStyle(new EZFontStyle());
+            var cellStyle = AppendCellStyle(new EZCellStyle());
 
             fills.Append(new Fill()
             {
@@ -46,9 +46,7 @@ namespace EZSpreadsheet
             });
             fills.Count = (uint)fills.ChildElements.Count;
 
-            borders.Append(new Border());
-
-            AppendCellFormat(fontId);
+            AppendCellFormat(cellStyle);
 
             WorkbookStylesPart.Stylesheet.Append(fonts);
             WorkbookStylesPart.Stylesheet.Append(fills);
@@ -56,46 +54,92 @@ namespace EZSpreadsheet
             WorkbookStylesPart.Stylesheet.Append(cellFormats);
         }
 
-        public uint AppendFontStyle(EZFontStyle fontStyle)
+        public EZCellStyle AppendCellStyle(EZCellStyle cellStyle)
         {
-            var existingStyle = FontIndices.FirstOrDefault(kvp => kvp.Key == fontStyle);
-            if (existingStyle.Key != null)
-                return existingStyle.Value;
+            var existingStyle = CellStyleList.FirstOrDefault(x => cellStyle.Equals(x));
+            if (existingStyle != null)
+                return existingStyle;
 
+            var fontMatch = CellStyleList.FirstOrDefault(x => cellStyle.FontEquals(x));
+
+            if (fontMatch == null)
+            {
+                var fontId = AppendFont(cellStyle);
+                cellStyle.FontId = fontId;
+            }
+            else
+            {
+                cellStyle.FontId = fontMatch.FontId;
+            }
+
+            var borderMatch = CellStyleList.FirstOrDefault(x => cellStyle.BorderEquals(x));
+
+            if (borderMatch == null)
+            {
+                var borderId = AppendBorder(cellStyle);
+                cellStyle.BorderId = borderId;
+            }
+            else
+            {
+                cellStyle.BorderId = borderMatch.BorderId;
+            }            
+
+            CellStyleList.Add(cellStyle);
+            return cellStyle;
+        }
+
+        private uint AppendFont(EZCellStyle cellStyle)
+        {
             fonts.Append(new Font()
             {
-                FontSize = new FontSize() { Val = fontStyle.FontSize },
-                Color = new Color() { Indexed = (uint)fontStyle.FontColor },
-                FontName = new FontName() { Val = fontStyle.Font.ToString() },
-                Bold = (fontStyle.IsBold)? new Bold() : null,
-                Italic = (fontStyle.IsItalic)? new Italic() : null,
-                Underline = (fontStyle.IsUnderlined)? new Underline(): null
+                FontSize = new FontSize() { Val = cellStyle.FontSize },
+                Color = new Color() { Indexed = (uint)cellStyle.FontColor },
+                FontName = new FontName() { Val = cellStyle.Font.ToString() },
+                Bold = (cellStyle.IsBold) ? new Bold() : null,
+                Italic = (cellStyle.IsItalic) ? new Italic() : null,
+                Underline = (cellStyle.IsUnderlined) ? new Underline() : null
             });
             fonts.Count = (uint)fonts.ChildElements.Count;
 
-            uint fontId = fonts.Count - 1;
-            FontIndices.Add(fontStyle, fontId);
-            return fontId;
+            return fonts.Count - 1;
         }
 
-        public uint AppendCellFormat(uint fontId)
+        public uint AppendBorder(EZCellStyle cellStyle)
         {
-            if (StyleIndices.ContainsKey(fontId))
-                return StyleIndices[fontId];
+            var border = new Border();
+            LeftBorder leftBorder = new LeftBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
+            RightBorder rightBorder = new RightBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
+            TopBorder topBorder = new TopBorder() { Style = (BorderStyleValues)cellStyle.BorderType };            
+            BottomBorder bottomBorder = new BottomBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
+            border.Append(leftBorder);
+            border.Append(rightBorder);
+            border.Append(topBorder);            
+            border.Append(bottomBorder);
+            borders.Append(border);
+            borders.Count = (uint)borders.ChildElements.Count;
+            return borders.Count - 1;
+        }
+
+        public uint AppendCellFormat(EZCellStyle cellStyle)
+        {
+            var existingStyle = CellStyleIndex.FirstOrDefault(kvp => cellStyle.Equals(kvp.Key));
+            if (existingStyle.Key != null)
+                return existingStyle.Value;
 
             cellFormats.Append(new CellFormat()
             {
-                BorderId = 0,
+                BorderId = cellStyle.BorderId,
                 FillId = 0,
-                FontId = fontId,
+                FontId = cellStyle.FontId,
                 NumberFormatId = 0,
                 FormatId = 0,
-                ApplyFont = true
+                ApplyFont = true,
+                ApplyBorder = true
             });
             cellFormats.Count = (uint)cellFormats.ChildElements.Count;
 
             uint styleIndex = cellFormats.Count - 1;
-            StyleIndices.Add(fontId, styleIndex);
+            CellStyleIndex.Add(cellStyle, styleIndex);
             return styleIndex;
         }
     }

@@ -63,14 +63,21 @@ namespace EZSpreadsheet
             }
             catch (Exception)
             {
-                throw new ArgumentException("Not possible to convert to a number");
+                return;
             }
 
             var kvp = Worksheet.WorkBook.SharedString.StringTable.First(x => x.Value == indexInStringTable);
 
             if (kvp.Key != null)
             {
-                SetValue(Convert.ToInt32(kvp.Key));
+                try
+                {
+                    SetValue(Convert.ToInt32(kvp.Key));
+                }
+                catch (Exception)
+                {
+                    return;
+                }
             }
         }
 
@@ -85,15 +92,14 @@ namespace EZSpreadsheet
 
             var props = typeof(T).GetProperties();
 
+            EZRange range = new EZRange(Worksheet, new List<EZCell>());
+
             if (includePropNameAsHeading)
             {
                 var propNames = props.Select(prop => prop.Name).ToList();
-                var range = InsertValueType(propNames, true);
-                range.SetFontStyle(new EZFontStyle() { IsBold = true });
+                range = InsertValueType(propNames, true);
                 currentRow++;
             }
-            
-            var cellList = new List<EZCell>();
 
             foreach (var item in data)
             {
@@ -104,14 +110,14 @@ namespace EZSpreadsheet
                     var value = item?.GetType().GetProperty(prop.Name)?.GetValue(item)?.ToString() ?? "";
                     var currentCell = Worksheet.GetCell(currentRow, currentColumn);
                     currentCell.SetText(value);
-                    cellList.Add(currentCell);
+                    range.CellList.Add(currentCell);
                     currentColumn++;
                 }
 
                 currentRow++;
             }
 
-            return new EZRange(Worksheet, cellList);
+            return range;
         }
 
         internal EZRange InsertValueType<T>(List<T> data, bool transposeData = false)
@@ -140,10 +146,10 @@ namespace EZSpreadsheet
             return new EZRange(Worksheet, cellList);
         }
 
-        public void SetFontStyle(EZFontStyle fontStyle)
+        public void SetCellStyle(EZCellStyle cellStyle)
         {
-            var fontId = Worksheet.WorkBook.StyleSheet.AppendFontStyle(fontStyle);
-            var styleIndex = Worksheet.WorkBook.StyleSheet.AppendCellFormat(fontId);
+            var style = Worksheet.WorkBook.StyleSheet.AppendCellStyle(cellStyle);
+            var styleIndex = Worksheet.WorkBook.StyleSheet.AppendCellFormat(style);
             ApplyStyle(styleIndex);
         }
     }

@@ -17,17 +17,14 @@ for (uint i = 1; i < 10; i++)
 }
 var range1 = worksheet.GetCell("a4").InsertData(list, true);
 range1?.ConvertToNumber();
-
-var range2 = worksheet.GetCell("a15").InsertData(new List<int>(), true);
-
-var range3 = worksheet.GetCell("a16").InsertData(new List<int>() { 1, 2, 3}, true);
-range3?.SetFontStyle(new EZFontStyle() { IsBold = true });
+range1?.SetCellStyle(new EZCellStyle { BorderType = EZSpreadsheet.StyleEnums.EZBorder.Thin });
 
 worksheet.GetCell("a", 1).SetText("a");
-//worksheet.GetCell(4, 3).ConvertToNumber();
-//worksheet.GetCell(1, 1).SetValue(1);
 
 workbook.Save();
+
+Console.WriteLine("Done");
+Console.ReadLine();
 
 class Data
 {

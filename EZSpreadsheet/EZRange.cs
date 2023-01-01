@@ -25,11 +25,11 @@ namespace EZSpreadsheet
             }
         }
 
-        public void SetFontStyle(EZFontStyle fontStyle)
+        public void SetCellStyle(EZCellStyle fontStyle)
         {
             foreach (var cell in CellList)
             {
-                cell.SetFontStyle(fontStyle);
+                cell.SetCellStyle(fontStyle);
             }
         }
     }
