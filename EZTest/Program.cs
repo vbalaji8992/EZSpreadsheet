@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using EZSpreadsheet;
+using EZSpreadsheet.StyleEnums;
 
 EZWorkbook workbook = new("EzBook.xlsx");
 var worksheet = workbook.AddSheet("EZ");
@@ -17,9 +18,10 @@ for (uint i = 1; i < 10; i++)
 }
 var range1 = worksheet.GetCell("b2").InsertData(list, true);
 range1?.ConvertToNumber();
-range1?.SetCellStyle(new EZCellStyle { BorderType = EZSpreadsheet.StyleEnums.EZBorder.Thin });
+range1?.SetStyle(new EZCellStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow });
 
 worksheet.GetCell("a", 1).SetText("a1");
+worksheet.GetCell("a", 1).SetStyle(new EZCellStyle { FillColor = EZColor.Green });
 
 workbook.Save();
 

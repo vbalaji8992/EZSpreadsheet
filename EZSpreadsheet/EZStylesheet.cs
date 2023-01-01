@@ -40,12 +40,6 @@ namespace EZSpreadsheet
         {           
             var cellStyle = AppendCellStyle(new EZCellStyle());
 
-            fills.Append(new Fill()
-            {
-                PatternFill = new PatternFill() { PatternType = PatternValues.None }
-            });
-            fills.Count = (uint)fills.ChildElements.Count;
-
             AppendCellFormat(cellStyle);
 
             WorkbookStylesPart.Stylesheet.Append(fonts);
@@ -61,28 +55,22 @@ namespace EZSpreadsheet
                 return existingStyle;
 
             var fontMatch = CellStyleList.FirstOrDefault(x => cellStyle.FontEquals(x));
-
             if (fontMatch == null)
-            {
-                var fontId = AppendFont(cellStyle);
-                cellStyle.FontId = fontId;
-            }
+                cellStyle.FontId = AppendFont(cellStyle);
             else
-            {
                 cellStyle.FontId = fontMatch.FontId;
-            }
 
             var borderMatch = CellStyleList.FirstOrDefault(x => cellStyle.BorderEquals(x));
-
             if (borderMatch == null)
-            {
-                var borderId = AppendBorder(cellStyle);
-                cellStyle.BorderId = borderId;
-            }
+                cellStyle.BorderId = AppendBorder(cellStyle);
             else
-            {
                 cellStyle.BorderId = borderMatch.BorderId;
-            }            
+
+            var fillMatch = CellStyleList.FirstOrDefault(x => cellStyle.FillEquals(x));
+            if (fillMatch == null)
+                cellStyle.FillId = AppendFill(cellStyle);
+            else
+                cellStyle.FillId = fillMatch.FillId;
 
             CellStyleList.Add(cellStyle);
             return cellStyle;
@@ -104,20 +92,53 @@ namespace EZSpreadsheet
             return fonts.Count - 1;
         }
 
-        public uint AppendBorder(EZCellStyle cellStyle)
+        private uint AppendBorder(EZCellStyle cellStyle)
         {
             var border = new Border();
+
             LeftBorder leftBorder = new LeftBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
             RightBorder rightBorder = new RightBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
             TopBorder topBorder = new TopBorder() { Style = (BorderStyleValues)cellStyle.BorderType };            
             BottomBorder bottomBorder = new BottomBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
+
             border.Append(leftBorder);
             border.Append(rightBorder);
             border.Append(topBorder);            
             border.Append(bottomBorder);
+
             borders.Append(border);
+
             borders.Count = (uint)borders.ChildElements.Count;
             return borders.Count - 1;
+        }
+
+        private uint AppendFill(EZCellStyle cellStyle)
+        {
+            if (fills.ChildElements.Count == 0)
+            {
+                fills.Append(new Fill()
+                {
+                    PatternFill = new PatternFill() { PatternType = PatternValues.Gray125 }
+                });
+                fills.Append(new Fill()
+                {
+                    PatternFill = new PatternFill() { PatternType = PatternValues.None }
+                });
+            }
+            else
+            {
+                fills.Append(new Fill()
+                {
+                    PatternFill = new PatternFill()
+                    {
+                        PatternType = PatternValues.Solid,
+                        ForegroundColor = new ForegroundColor() { Indexed = (uint)cellStyle.FillColor }
+                    }
+                });                
+            }
+
+            fills.Count = (uint)fills.ChildElements.Count;
+            return fills.Count - 1;
         }
 
         public uint AppendCellFormat(EZCellStyle cellStyle)
@@ -129,12 +150,13 @@ namespace EZSpreadsheet
             cellFormats.Append(new CellFormat()
             {
                 BorderId = cellStyle.BorderId,
-                FillId = 0,
+                FillId = cellStyle.FillId,
                 FontId = cellStyle.FontId,
                 NumberFormatId = 0,
                 FormatId = 0,
                 ApplyFont = true,
-                ApplyBorder = true
+                ApplyBorder = true,
+                ApplyFill = true
             });
             cellFormats.Count = (uint)cellFormats.ChildElements.Count;
 

@@ -146,7 +146,7 @@ namespace EZSpreadsheet
             return new EZRange(Worksheet, cellList);
         }
 
-        public void SetCellStyle(EZCellStyle cellStyle)
+        public void SetStyle(EZCellStyle cellStyle)
         {
             var style = Worksheet.WorkBook.StyleSheet.AppendCellStyle(cellStyle);
             var styleIndex = Worksheet.WorkBook.StyleSheet.AppendCellFormat(style);

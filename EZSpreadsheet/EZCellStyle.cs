@@ -33,6 +33,8 @@ namespace EZSpreadsheet
 
         public EZBorder BorderType { get; set; } = EZBorder.None;
 
+        public EZColor FillColor { get; set; } = EZColor.White;
+
         private uint _numberFormat = 0;
         public uint NumberFormat
         {
@@ -48,6 +50,7 @@ namespace EZSpreadsheet
 
         internal uint FontId { get; set; }
         internal uint BorderId { get; set; }
+        internal uint FillId { get; set; }
 
         internal bool FontEquals(EZCellStyle? other)
         {
@@ -74,6 +77,17 @@ namespace EZSpreadsheet
             return true;
         }
 
+        internal bool FillEquals(EZCellStyle? other)
+        {
+            if (other == null)
+                return false;
+
+            if (FillColor != other.FillColor)
+                return false;
+
+            return true;
+        }
+
         public bool Equals(EZCellStyle? other)
         {
             if (other == null)
@@ -86,6 +100,9 @@ namespace EZSpreadsheet
                 return false;
 
             if (BorderColor != other.BorderColor || BorderType != other.BorderType)
+                return false;
+
+            if (FillColor != other.FillColor)
                 return false;
 
             return true;
