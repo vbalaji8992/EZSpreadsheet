@@ -15,11 +15,11 @@ for (uint i = 1; i < 10; i++)
         Prop3 = new Random().Next(100)
     });
 }
-var range1 = worksheet.GetCell("a4").InsertData(list, true);
+var range1 = worksheet.GetCell("b2").InsertData(list, true);
 range1?.ConvertToNumber();
 range1?.SetCellStyle(new EZCellStyle { BorderType = EZSpreadsheet.StyleEnums.EZBorder.Thin });
 
-worksheet.GetCell("a", 1).SetText("a");
+worksheet.GetCell("a", 1).SetText("a1");
 
 workbook.Save();
 

@@ -128,10 +128,15 @@ namespace EZSpreadsheet
         {
             string cellReference = columnName + rowIndex;
 
-            Row row = new Row() { RowIndex = rowIndex };
+            Row row = new Row() { RowIndex = rowIndex };          
 
-            var presentRows = SheetData.ChildElements;
-            var refRow = presentRows?.Select(x => x as Row).Where(x => x?.RowIndex! > rowIndex).OrderBy(x => x?.RowIndex).FirstOrDefault();
+            var maxRow = (CellListByRowIndex.Count > 0) ? CellListByRowIndex.Keys.Max() : 0;
+            Row? refRow = null;
+            if (rowIndex < maxRow)
+            {
+                var presentRows = SheetData.ChildElements;
+                refRow = presentRows?.Select(x => x as Row).Where(x => x?.RowIndex! > rowIndex).OrderBy(x => x?.RowIndex).FirstOrDefault();
+            }            
 
             if (refRow != null)
             {
