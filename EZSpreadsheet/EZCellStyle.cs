@@ -35,15 +35,15 @@ namespace EZSpreadsheet
 
         public EZColor FillColor { get; set; } = EZColor.White;
 
-        private uint _numberFormat = 0;
-        public uint NumberFormat
+        private uint _numberFormatId = 0;
+        public uint NumberFormatId
         {
-            get => _numberFormat;
+            get => _numberFormatId;
             set
             {
                 if ((value >= 0) && (value <= 49))
                 {
-                    _numberFormat = value;
+                    _numberFormatId = value;
                 }
             }
         }
@@ -105,6 +105,9 @@ namespace EZSpreadsheet
             if (FillColor != other.FillColor)
                 return false;
 
+            if (NumberFormatId != other.NumberFormatId)
+                return false;
+
             return true;
         }
 
@@ -115,7 +118,7 @@ namespace EZSpreadsheet
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Font, FontColor, FontSize, IsBold, IsItalic, IsUnderlined, BorderColor, BorderType);
+            return HashCode.Combine(FontId, BorderId, FillId, NumberFormatId);
         }
     }
 }

@@ -152,7 +152,7 @@ namespace EZSpreadsheet
                 BorderId = cellStyle.BorderId,
                 FillId = cellStyle.FillId,
                 FontId = cellStyle.FontId,
-                NumberFormatId = 0,
+                NumberFormatId = cellStyle.NumberFormatId,
                 FormatId = 0,
                 ApplyFont = true,
                 ApplyBorder = true,

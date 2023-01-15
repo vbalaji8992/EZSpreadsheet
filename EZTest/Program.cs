@@ -18,10 +18,16 @@ for (uint i = 1; i < 10; i++)
 }
 var range1 = worksheet.GetCell("b2").InsertData(list, true);
 range1?.ConvertToNumber();
-range1?.SetStyle(new EZCellStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow });
+range1?.SetStyle(new EZCellStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, NumberFormatId = 2 });
 
 worksheet.GetCell("a", 1).SetText("a1");
 worksheet.GetCell("a", 1).SetStyle(new EZCellStyle { FillColor = EZColor.Green });
+
+worksheet.GetCell("a", 2).SetText("a2");
+worksheet.GetCell("a", 2).SetStyle(new EZCellStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow });
+
+worksheet.GetCell("f6").SetFormula("SUM(B3:D11)");
+worksheet.GetCell("f2").SetFormula("CONCATENATE(B2,C2,D2)");
 
 workbook.Save();
 

@@ -44,6 +44,11 @@ namespace EZSpreadsheet
             Cell.DataType = new EnumValue<CellValues>(CellValues.Number);
         }
 
+        public void SetFormula(string formula)
+        {
+            Cell.CellFormula = new CellFormula(formula);
+        }
+
         public void ApplyStyle(uint index)
         {
             Cell.StyleIndex = index;
