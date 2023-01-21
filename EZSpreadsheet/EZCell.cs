@@ -109,7 +109,7 @@ namespace EZSpreadsheet
             }
         }
 
-        public EZRange? InsertData<T>(List<T> data, bool includePropNameAsHeading = false)
+        public EZRange InsertData<T>(List<T> data, bool includePropNameAsHeading = false)
         {
             if (typeof(T).IsValueType || typeof(T) == typeof(string))
             {

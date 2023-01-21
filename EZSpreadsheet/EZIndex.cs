@@ -12,12 +12,12 @@ namespace EZSpreadsheet
         internal const int MaxColumnIndex = 16384;
         internal const uint AsciiOffset = 64;
 
-        internal static (string columnName, uint rowIndex) GetRowColumnIndex(string cellReference)
+        internal static (string columnName, uint rowIndex) GetRowIndexColumnName(string cellReference)
         {
             string columnName;
             uint rowIndex;
 
-            if (Regex.IsMatch(cellReference, "^[a-zA-Z]{1,2}[1-9]+$"))
+            if (Regex.IsMatch(cellReference, "^[a-zA-Z]{1,2}[0-9]+$"))
             {
                 columnName = Regex.Replace(cellReference, @"[\d]", "").ToUpper();
                 rowIndex = Convert.ToUInt32(Regex.Replace(cellReference, "[a-zA-Z]", ""));                

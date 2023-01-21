@@ -71,7 +71,7 @@ namespace EZSpreadsheet
         
         public EZCell GetCell(string cellReference)
         {
-            var (columnName, rowIndex) = EZIndex.GetRowColumnIndex(cellReference);
+            var (columnName, rowIndex) = EZIndex.GetRowIndexColumnName(cellReference);
 
             return GetCell(columnName, rowIndex);
         }
@@ -154,6 +154,48 @@ namespace EZSpreadsheet
             CellListByRowIndex.Add(rowIndex, new List<EZCell> { excelCell });
 
             return excelCell;
+        }
+
+        public EZRange GetRange(uint startRowIndex, uint startColIndex, uint endRowIndex, uint endColIndex)
+        {
+            var cellList = new List<EZCell>();
+
+            if (startRowIndex > endRowIndex)
+            {
+                uint temp = startRowIndex;
+                startRowIndex = endRowIndex;
+                endRowIndex = temp;
+            }
+
+            if (startColIndex > endColIndex)
+            {
+                uint temp = startColIndex;
+                startColIndex = endColIndex;
+                endColIndex = temp;
+            }
+            
+            for (uint i = startRowIndex; i <= endRowIndex; i++)
+            {
+                for (uint j = startColIndex; j <= endColIndex; j++)
+                {
+                    cellList.Add(GetCell(i, j));
+                }
+            }
+
+            return new EZRange(this, cellList);
+        }
+
+        public EZRange GetRange(string startCellReference, string endCellReference) 
+        {
+            var startRowColumn = EZIndex.GetRowIndexColumnName(startCellReference);
+            var endRowColumn = EZIndex.GetRowIndexColumnName(endCellReference);
+
+            return GetRange(
+                startRowColumn.rowIndex,
+                EZIndex.GetColumnIndex(startRowColumn.columnName),
+                endRowColumn.rowIndex,
+                EZIndex.GetColumnIndex(endRowColumn.columnName)
+            );
         }
 
         public uint GetFirstRowIndex()
