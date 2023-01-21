@@ -18,6 +18,25 @@ namespace EZSpreadsheet
         public Cell Cell { get; }
         public Row Row { get; }
 
+        private static HashSet<Type> IntegralTypes = new HashSet<Type>
+        {
+            typeof(sbyte),
+            typeof(byte),
+            typeof(short),
+            typeof(ushort),
+            typeof(int),
+            typeof(uint),
+            typeof(long),
+            typeof(ulong)
+        };
+
+        private static HashSet<Type> DecimalTypes = new HashSet<Type>
+        {
+            typeof(float),
+            typeof(double),
+            typeof(decimal)
+        };
+
         public EZCell(uint rowIndex, string columnName, Row row, Cell cell, EZWorksheet worksheet)
         {
             RowIndex = rowIndex;
@@ -28,19 +47,23 @@ namespace EZSpreadsheet
             ColumnIndex = EZIndex.GetColumnIndex(columnName);
         }
 
-        public void SetText<T>(T value)
+        public void SetValue<T>(T value)
         {
-            int index = Worksheet.WorkBook.SharedString.InsertString(value.ToString());
-
-            Cell.CellValue = new CellValue(index.ToString());
-            Cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
-            
-            //Worksheet.SaveWorksheet();
+            if (value != null && (IntegralTypes.Contains(typeof(T)) || DecimalTypes.Contains(typeof(T))))
+            {
+                SetNumber(value.ToString()!);
+            }
+            else
+            {
+                int index = Worksheet.WorkBook.SharedString.InsertString(value?.ToString() ?? "null");
+                Cell.CellValue = new CellValue(index.ToString());
+                Cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
+            }
         }
 
-        public void SetValue(int value)
+        private void SetNumber(string value)
         { 
-            Cell.CellValue = new CellValue(value.ToString());
+            Cell.CellValue = new CellValue(value);
             Cell.DataType = new EnumValue<CellValues>(CellValues.Number);
         }
 
@@ -112,9 +135,16 @@ namespace EZSpreadsheet
 
                 foreach (var prop in props)
                 {
-                    var value = item?.GetType().GetProperty(prop.Name)?.GetValue(item)?.ToString() ?? "";
+                    var propInfo = item?.GetType().GetProperty(prop.Name);
+                    var type = propInfo?.PropertyType;
+                    var value = propInfo?.GetValue(item);                    
                     var currentCell = Worksheet.GetCell(currentRow, currentColumn);
-                    currentCell.SetText(value);
+
+                    if (value != null && type != null)
+                        currentCell.SetValue(CastHelper.Cast(value, type));
+                    else
+                        currentCell.SetValue("null");
+
                     range.CellList.Add(currentCell);
                     currentColumn++;
                 }
@@ -135,7 +165,7 @@ namespace EZSpreadsheet
             foreach (var value in data)
             {
                 var currentCell = Worksheet.GetCell(currentRow, currentColumn);
-                currentCell.SetText(value);
+                currentCell.SetValue(value);
                 cellList.Add(currentCell);
 
                 if (transposeData)
