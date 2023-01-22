@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace EZSpreadsheet
 {
-    class EZSharedString
+    internal class EZSharedString
     {
-        public EZWorkbook WorkBook { get; }
+        internal EZWorkbook WorkBook { get; }
 
-        public SharedStringTablePart SharedStringPart { get; }
+        internal SharedStringTablePart SharedStringPart { get; }
 
-        public Dictionary<string, int> StringTable { get; }
+        internal Dictionary<string, int> StringTable { get; }
 
-        public EZSharedString(EZWorkbook workBook, SharedStringTablePart sharedStringTablePart)
+        internal EZSharedString(EZWorkbook workBook, SharedStringTablePart sharedStringTablePart)
         {
             WorkBook = workBook;
             SharedStringPart = sharedStringTablePart;
@@ -24,7 +24,7 @@ namespace EZSpreadsheet
             StringTable = new Dictionary<string, int>();
         }
 
-        public int InsertString(string value)
+        internal int InsertString(string value)
         {
             if (SharedStringPart.SharedStringTable == null)
             {
@@ -36,8 +36,6 @@ namespace EZSpreadsheet
                 SharedStringPart.SharedStringTable.AppendChild(new SharedStringItem(new Text(value)));
                 StringTable.Add(value, StringTable.Count);
             }
-
-            //SharedStringPart.SharedStringTable.Save();
 
             return StringTable[value];
         }

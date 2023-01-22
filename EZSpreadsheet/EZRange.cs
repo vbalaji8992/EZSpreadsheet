@@ -9,10 +9,10 @@ namespace EZSpreadsheet
 {
     public class EZRange
     {
-        public EZWorksheet Worksheet { get; }
-        public List<EZCell> CellList { get; }
+        internal EZWorksheet Worksheet { get; }
+        internal List<EZCell> CellList { get; }
 
-        public EZRange(EZWorksheet worksheet, List<EZCell> cellList)
+        internal EZRange(EZWorksheet worksheet, List<EZCell> cellList)
         {
             Worksheet = worksheet;
             CellList = cellList;

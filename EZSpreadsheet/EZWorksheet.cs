@@ -18,7 +18,7 @@ namespace EZSpreadsheet
         internal SheetData SheetData { get; set; }
         internal Dictionary<uint, List<EZCell>> CellListByRowIndex { get; }
 
-        public EZWorksheet(EZWorkbook workBook, string? sheetName)
+        internal EZWorksheet(EZWorkbook workBook, string? sheetName)
         {
             WorksheetPart worksheetPart = workBook.SpreadsheetDocument.WorkbookPart!.AddNewPart<WorksheetPart>();
             SheetData sheetData = new SheetData();

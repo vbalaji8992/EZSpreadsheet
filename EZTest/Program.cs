@@ -26,7 +26,7 @@ worksheet.GetCell("a", 1)
 
 worksheet.GetCell("a", 2)
     .SetValue<string?>(null)
-    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.Century });
+    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.Century, FontSize = 50 });
 
 worksheet.GetCell("f6")
     .SetFormula("SUM(B3:D11)");

@@ -11,17 +11,17 @@ namespace EZSpreadsheet.Style
 {
     internal class EZStylesheet
     {
-        EZWorkbook WorkBook { get; }
-        WorkbookStylesPart WorkbookStylesPart { get; }
-        List<EZStyle> CellStyleList { get; }
-        Dictionary<EZStyle, uint> CellStyleIndex { get; }
+        internal EZWorkbook WorkBook { get; }
+        internal WorkbookStylesPart WorkbookStylesPart { get; }
+        internal List<EZStyle> CellStyleList { get; }
+        internal Dictionary<EZStyle, uint> CellStyleIndex { get; }
 
         private Fonts fonts;
         private Fills fills;
         private Borders borders;
         private CellFormats cellFormats;
 
-        public EZStylesheet(EZWorkbook workBook, WorkbookStylesPart workbookStylesPart)
+        internal EZStylesheet(EZWorkbook workBook, WorkbookStylesPart workbookStylesPart)
         {
             WorkBook = workBook;
             WorkbookStylesPart = workbookStylesPart;
@@ -35,7 +35,7 @@ namespace EZSpreadsheet.Style
             AppendBasicStyles();
         }
 
-        void AppendBasicStyles()
+        private void AppendBasicStyles()
         {
             var cellStyle = AppendCellStyle(new EZStyle());
 
@@ -47,7 +47,7 @@ namespace EZSpreadsheet.Style
             WorkbookStylesPart.Stylesheet.Append(cellFormats);
         }
 
-        public EZStyle AppendCellStyle(EZStyle cellStyle)
+        internal EZStyle AppendCellStyle(EZStyle cellStyle)
         {
             var existingStyle = CellStyleList.FirstOrDefault(x => cellStyle.Equals(x));
             if (existingStyle != null)
@@ -140,7 +140,7 @@ namespace EZSpreadsheet.Style
             return fills.Count - 1;
         }
 
-        public uint AppendCellFormat(EZStyle cellStyle)
+        internal uint AppendCellFormat(EZStyle cellStyle)
         {
             var existingStyle = CellStyleIndex.FirstOrDefault(kvp => cellStyle.Equals(kvp.Key));
             if (existingStyle.Key != null)

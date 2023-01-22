@@ -12,13 +12,13 @@ namespace EZSpreadsheet
 {
     public class EZCell
     {
-        public EZWorksheet Worksheet { get; }
-        public uint RowIndex { get; set; }
-        public string ColumnName { get; set; }
-        public uint ColumnIndex { get; set; }
-        public string CellReference { get { return ColumnName + RowIndex; } }
-        public Cell Cell { get; }
-        public Row Row { get; }
+        internal EZWorksheet Worksheet { get; }
+        internal uint RowIndex { get; set; }
+        internal string ColumnName { get; set; }
+        internal uint ColumnIndex { get; set; }
+        internal string CellReference { get { return ColumnName + RowIndex; } }
+        internal Cell Cell { get; }
+        internal Row Row { get; }
 
         private static HashSet<Type> IntegralTypes = new HashSet<Type>
         {
@@ -39,7 +39,7 @@ namespace EZSpreadsheet
             typeof(decimal)
         };
 
-        public EZCell(uint rowIndex, string columnName, Row row, Cell cell, EZWorksheet worksheet)
+        internal EZCell(uint rowIndex, string columnName, Row row, Cell cell, EZWorksheet worksheet)
         {
             RowIndex = rowIndex;
             ColumnName = columnName;
@@ -89,7 +89,7 @@ namespace EZSpreadsheet
             return this;
         }
 
-        public void ApplyStyle(uint index)
+        private void ApplyStyle(uint index)
         {
             Cell.StyleIndex = index;
         }
@@ -174,7 +174,7 @@ namespace EZSpreadsheet
             return range;
         }
 
-        internal EZRange InsertValueType<T>(List<T> data, bool transposeData = false)
+        private EZRange InsertValueType<T>(List<T> data, bool transposeData = false)
         {
             var currentRow = RowIndex;
             var currentColumn = ColumnIndex;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EZSpreadsheet.Utils
 {
-    class EZIndex
+    internal class EZIndex
     {
         internal const int MaxColumnIndex = 16384;
         internal const uint AsciiOffset = 64;
