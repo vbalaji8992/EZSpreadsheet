@@ -19,7 +19,7 @@ for (uint i = 1; i < 10; i++)
 var range1 = worksheet.GetCell("b2").InsertData(list, true);
 range1.SetStyle(new EZCellStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow });
 
-worksheet.GetCell("a", 1).SetValue(12.345678);
+worksheet.GetCell("a", 1).SetValue<double?>(12.345678);
 worksheet.GetCell("a", 1).SetStyle(new EZCellStyle { FillColor = EZColor.Green, NumberFormatId = 2 });
 
 worksheet.GetCell("a", 2).SetValue<string?>(null);

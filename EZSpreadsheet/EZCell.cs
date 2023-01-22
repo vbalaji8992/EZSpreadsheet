@@ -49,7 +49,7 @@ namespace EZSpreadsheet
 
         public void SetValue<T>(T value)
         {
-            if (value != null && (IntegralTypes.Contains(typeof(T)) || DecimalTypes.Contains(typeof(T))))
+            if (value != null && isNumericType(typeof(T)))
             {
                 SetNumber(value.ToString()!);
             }
@@ -59,6 +59,18 @@ namespace EZSpreadsheet
                 Cell.CellValue = new CellValue(index.ToString());
                 Cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
             }
+        }
+
+        private bool isNumericType(Type type) 
+        {
+            var nullableType = Nullable.GetUnderlyingType(type);
+            if (nullableType != null)
+                type = nullableType;
+
+            if (IntegralTypes.Contains(type) || DecimalTypes.Contains(type))
+                return true;
+
+            return false;
         }
 
         private void SetNumber(string value)
