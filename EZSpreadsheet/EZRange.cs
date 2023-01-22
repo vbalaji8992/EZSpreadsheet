@@ -17,20 +17,24 @@ namespace EZSpreadsheet
             CellList = cellList;
         }
 
-        public void ConvertToNumber()
+        public EZRange ConvertToNumber()
         {
             foreach(var cell in CellList)
             {
                 cell.ConvertToNumber();
             }
+
+            return this;
         }
 
-        public void SetStyle(EZCellStyle fontStyle)
+        public EZRange SetStyle(EZCellStyle fontStyle)
         {
             foreach (var cell in CellList)
             {
                 cell.SetStyle(fontStyle);
             }
+
+            return this;
         }
     }
 }

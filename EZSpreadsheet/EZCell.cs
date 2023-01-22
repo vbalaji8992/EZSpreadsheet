@@ -47,7 +47,7 @@ namespace EZSpreadsheet
             ColumnIndex = EZIndex.GetColumnIndex(columnName);
         }
 
-        public void SetValue<T>(T value)
+        public EZCell SetValue<T>(T value)
         {
             if (value != null && isNumericType(typeof(T)))
             {
@@ -59,6 +59,8 @@ namespace EZSpreadsheet
                 Cell.CellValue = new CellValue(index.ToString());
                 Cell.DataType = new EnumValue<CellValues>(CellValues.SharedString);
             }
+
+            return this;
         }
 
         private bool isNumericType(Type type) 
@@ -79,9 +81,10 @@ namespace EZSpreadsheet
             Cell.DataType = new EnumValue<CellValues>(CellValues.Number);
         }
 
-        public void SetFormula(string formula)
+        public EZCell SetFormula(string formula)
         {
             Cell.CellFormula = new CellFormula(formula);
+            return this;
         }
 
         public void ApplyStyle(uint index)
@@ -89,11 +92,11 @@ namespace EZSpreadsheet
             Cell.StyleIndex = index;
         }
 
-        public void ConvertToNumber()
+        public EZCell ConvertToNumber()
         {
             if (Cell.DataType == null || Cell.CellValue == null || Cell.DataType == CellValues.Number)
             {
-                return;
+                return this;
             }
 
             int indexInStringTable;
@@ -103,7 +106,7 @@ namespace EZSpreadsheet
             }
             catch (Exception)
             {
-                return;
+                return this;
             }
 
             var kvp = Worksheet.WorkBook.SharedString.StringTable.First(x => x.Value == indexInStringTable);
@@ -116,9 +119,11 @@ namespace EZSpreadsheet
                 }
                 catch (Exception)
                 {
-                    return;
+                    return this;
                 }
             }
+
+            return this;
         }
 
         public EZRange InsertData<T>(List<T> data, bool includePropNameAsHeading = false)
@@ -193,11 +198,12 @@ namespace EZSpreadsheet
             return new EZRange(Worksheet, cellList);
         }
 
-        public void SetStyle(EZCellStyle cellStyle)
+        public EZCell SetStyle(EZCellStyle cellStyle)
         {
             var style = Worksheet.WorkBook.StyleSheet.AppendCellStyle(cellStyle);
             var styleIndex = Worksheet.WorkBook.StyleSheet.AppendCellFormat(style);
             ApplyStyle(styleIndex);
+            return this;
         }
     }
 }
