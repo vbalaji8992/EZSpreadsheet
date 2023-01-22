@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace EZSpreadsheet
+namespace EZSpreadsheet.Utils
 {
     class EZIndex
     {
@@ -20,7 +20,7 @@ namespace EZSpreadsheet
             if (Regex.IsMatch(cellReference, "^[a-zA-Z]{1,2}[0-9]+$"))
             {
                 columnName = Regex.Replace(cellReference, @"[\d]", "").ToUpper();
-                rowIndex = Convert.ToUInt32(Regex.Replace(cellReference, "[a-zA-Z]", ""));                
+                rowIndex = Convert.ToUInt32(Regex.Replace(cellReference, "[a-zA-Z]", ""));
             }
             else
             {

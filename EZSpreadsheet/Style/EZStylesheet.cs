@@ -1,6 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using EZSpreadsheet.StyleEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace EZSpreadsheet
+namespace EZSpreadsheet.Style
 {
     internal class EZStylesheet
     {
         EZWorkbook WorkBook { get; }
         WorkbookStylesPart WorkbookStylesPart { get; }
-        List<EZCellStyle> CellStyleList { get; }
-        Dictionary<EZCellStyle, uint> CellStyleIndex { get; }
+        List<EZStyle> CellStyleList { get; }
+        Dictionary<EZStyle, uint> CellStyleIndex { get; }
 
         private Fonts fonts;
         private Fills fills;
@@ -27,8 +26,8 @@ namespace EZSpreadsheet
             WorkBook = workBook;
             WorkbookStylesPart = workbookStylesPart;
             WorkbookStylesPart.Stylesheet = new Stylesheet();
-            CellStyleList = new List<EZCellStyle>();
-            CellStyleIndex = new Dictionary<EZCellStyle, uint>();
+            CellStyleList = new List<EZStyle>();
+            CellStyleIndex = new Dictionary<EZStyle, uint>();
             fonts = new Fonts();
             fills = new Fills();
             borders = new Borders();
@@ -37,8 +36,8 @@ namespace EZSpreadsheet
         }
 
         void AppendBasicStyles()
-        {           
-            var cellStyle = AppendCellStyle(new EZCellStyle());
+        {
+            var cellStyle = AppendCellStyle(new EZStyle());
 
             AppendCellFormat(cellStyle);
 
@@ -48,7 +47,7 @@ namespace EZSpreadsheet
             WorkbookStylesPart.Stylesheet.Append(cellFormats);
         }
 
-        public EZCellStyle AppendCellStyle(EZCellStyle cellStyle)
+        public EZStyle AppendCellStyle(EZStyle cellStyle)
         {
             var existingStyle = CellStyleList.FirstOrDefault(x => cellStyle.Equals(x));
             if (existingStyle != null)
@@ -76,34 +75,34 @@ namespace EZSpreadsheet
             return cellStyle;
         }
 
-        private uint AppendFont(EZCellStyle cellStyle)
+        private uint AppendFont(EZStyle cellStyle)
         {
             fonts.Append(new Font()
             {
                 FontSize = new FontSize() { Val = cellStyle.FontSize },
                 Color = new Color() { Indexed = (uint)cellStyle.FontColor },
                 FontName = new FontName() { Val = cellStyle.Font.ToString() },
-                Bold = (cellStyle.IsBold) ? new Bold() : null,
-                Italic = (cellStyle.IsItalic) ? new Italic() : null,
-                Underline = (cellStyle.IsUnderlined) ? new Underline() : null
+                Bold = cellStyle.IsBold ? new Bold() : null,
+                Italic = cellStyle.IsItalic ? new Italic() : null,
+                Underline = cellStyle.IsUnderlined ? new Underline() : null
             });
             fonts.Count = (uint)fonts.ChildElements.Count;
 
             return fonts.Count - 1;
         }
 
-        private uint AppendBorder(EZCellStyle cellStyle)
+        private uint AppendBorder(EZStyle cellStyle)
         {
             var border = new Border();
 
             LeftBorder leftBorder = new LeftBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
             RightBorder rightBorder = new RightBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
-            TopBorder topBorder = new TopBorder() { Style = (BorderStyleValues)cellStyle.BorderType };            
+            TopBorder topBorder = new TopBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
             BottomBorder bottomBorder = new BottomBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
 
             border.Append(leftBorder);
             border.Append(rightBorder);
-            border.Append(topBorder);            
+            border.Append(topBorder);
             border.Append(bottomBorder);
 
             borders.Append(border);
@@ -112,7 +111,7 @@ namespace EZSpreadsheet
             return borders.Count - 1;
         }
 
-        private uint AppendFill(EZCellStyle cellStyle)
+        private uint AppendFill(EZStyle cellStyle)
         {
             if (fills.ChildElements.Count == 0)
             {
@@ -134,14 +133,14 @@ namespace EZSpreadsheet
                         PatternType = PatternValues.Solid,
                         ForegroundColor = new ForegroundColor() { Indexed = (uint)cellStyle.FillColor }
                     }
-                });                
+                });
             }
 
             fills.Count = (uint)fills.ChildElements.Count;
             return fills.Count - 1;
         }
 
-        public uint AppendCellFormat(EZCellStyle cellStyle)
+        public uint AppendCellFormat(EZStyle cellStyle)
         {
             var existingStyle = CellStyleIndex.FirstOrDefault(kvp => cellStyle.Equals(kvp.Key));
             if (existingStyle.Key != null)

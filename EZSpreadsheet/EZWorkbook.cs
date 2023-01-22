@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using EZSpreadsheet.Style;
 
 namespace EZSpreadsheet
 {

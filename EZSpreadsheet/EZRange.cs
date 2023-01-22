@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EZSpreadsheet.Style;
 
 namespace EZSpreadsheet
 {
@@ -27,11 +28,11 @@ namespace EZSpreadsheet
             return this;
         }
 
-        public EZRange SetStyle(EZCellStyle fontStyle)
+        public EZRange SetStyle(EZStyle cellStyle)
         {
             foreach (var cell in CellList)
             {
-                cell.SetStyle(fontStyle);
+                cell.SetStyle(cellStyle);
             }
 
             return this;

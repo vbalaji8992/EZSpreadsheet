@@ -1,13 +1,12 @@
-﻿using EZSpreadsheet.StyleEnums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EZSpreadsheet
+namespace EZSpreadsheet.Style
 {
-    public class EZCellStyle: IEquatable<EZCellStyle>
+    public class EZStyle : IEquatable<EZStyle>
     {
         public EZFont Font { get; set; } = EZFont.Calibri;
         public EZColor FontColor { get; set; } = EZColor.Black;
@@ -18,7 +17,7 @@ namespace EZSpreadsheet
             get => _fontSize;
             set
             {
-                if ((value > 0) && (value <= 409))
+                if (value > 0 && value <= 409)
                 {
                     _fontSize = value;
                 }
@@ -41,7 +40,7 @@ namespace EZSpreadsheet
             get => _numberFormatId;
             set
             {
-                if ((value >= 0) && (value <= 49))
+                if (value >= 0 && value <= 49)
                 {
                     _numberFormatId = value;
                 }
@@ -52,7 +51,7 @@ namespace EZSpreadsheet
         internal uint BorderId { get; set; }
         internal uint FillId { get; set; }
 
-        internal bool FontEquals(EZCellStyle? other)
+        internal bool FontEquals(EZStyle? other)
         {
             if (other == null)
                 return false;
@@ -66,7 +65,7 @@ namespace EZSpreadsheet
             return true;
         }
 
-        internal bool BorderEquals(EZCellStyle? other)
+        internal bool BorderEquals(EZStyle? other)
         {
             if (other == null)
                 return false;
@@ -77,7 +76,7 @@ namespace EZSpreadsheet
             return true;
         }
 
-        internal bool FillEquals(EZCellStyle? other)
+        internal bool FillEquals(EZStyle? other)
         {
             if (other == null)
                 return false;
@@ -88,7 +87,7 @@ namespace EZSpreadsheet
             return true;
         }
 
-        public bool Equals(EZCellStyle? other)
+        public bool Equals(EZStyle? other)
         {
             if (other == null)
                 return false;
@@ -113,7 +112,7 @@ namespace EZSpreadsheet
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as EZCellStyle);
+            return Equals(obj as EZStyle);
         }
 
         public override int GetHashCode()

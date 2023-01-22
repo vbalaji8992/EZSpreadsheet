@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EZSpreadsheet.StyleEnums
+namespace EZSpreadsheet.Style
 {
     public enum EZColor: uint
     {

@@ -1,5 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
+using EZSpreadsheet.Style;
+using EZSpreadsheet.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -198,7 +200,7 @@ namespace EZSpreadsheet
             return new EZRange(Worksheet, cellList);
         }
 
-        public EZCell SetStyle(EZCellStyle cellStyle)
+        public EZCell SetStyle(EZStyle cellStyle)
         {
             var style = Worksheet.WorkBook.StyleSheet.AppendCellStyle(cellStyle);
             var styleIndex = Worksheet.WorkBook.StyleSheet.AppendCellFormat(style);

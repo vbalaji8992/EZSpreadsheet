@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using EZSpreadsheet;
-using EZSpreadsheet.StyleEnums;
+using EZSpreadsheet.Style;
 
 EZWorkbook workbook = new("EzBook.xlsx");
 var worksheet = workbook.AddSheet("EZ");
@@ -18,15 +18,15 @@ for (uint i = 1; i < 10; i++)
 }
 worksheet.GetCell("b2")
     .InsertData(list, true)
-    .SetStyle(new EZCellStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.TimesNewRoman });
+    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.TimesNewRoman });
 
 worksheet.GetCell("a", 1)
     .SetValue<double?>(12.345678)
-    .SetStyle(new EZCellStyle { FillColor = EZColor.Green, NumberFormatId = 2, Font = EZFont.Arial });
+    .SetStyle(new EZStyle { FillColor = EZColor.Green, NumberFormatId = 2, Font = EZFont.Arial });
 
 worksheet.GetCell("a", 2)
     .SetValue<string?>(null)
-    .SetStyle(new EZCellStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.Century });
+    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.Century });
 
 worksheet.GetCell("f6")
     .SetFormula("SUM(B3:D11)");
@@ -34,7 +34,7 @@ worksheet.GetCell("f6")
 worksheet.GetCell("f2")
     .SetFormula("CONCATENATE(B2,C2,D2)");
 
-worksheet.GetRange("j11", "e2").SetStyle(new EZCellStyle { FillColor = EZColor.Pink });
+worksheet.GetRange("j11", "e2").SetStyle(new EZStyle { FillColor = EZColor.Pink });
 
 workbook.Save();
 

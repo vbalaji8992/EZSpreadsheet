@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace EZSpreadsheet
+namespace EZSpreadsheet.Utils
 {
     internal class CastHelper
     {
