@@ -1,78 +1,47 @@
 using Xunit.Abstractions;
+using System.IO.Compression;
+using DocumentFormat.OpenXml.Vml.Office;
+using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = Xunit.Assert;
+using System.Text.RegularExpressions;
 
 namespace EZSpreadsheet.Tests
 {
     public class WorkbookTest
     {
         private readonly ITestOutputHelper output;
-        private const string TEST_RESOURCES_FOLDER = "TestResources/WorkbookTest";
 
         public WorkbookTest(ITestOutputHelper output)
         {
             this.output = output;
+            TestHelper.CreateFolder(TestHelper.TEST_OUTPUT_FOLDER);
+        }        
 
-            if (!Directory.Exists(TEST_RESOURCES_FOLDER))
+        [Fact]
+        public void ShouldGenerateWorkbook()
+        {
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\ShouldGenerateWorkbook.xlsx";
+            var wb = new EZWorkbook(file);
+            wb.Save();
+
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\ShouldGenerateWorkbook";
+            var extractedFiles = TestHelper.ExtractFiles(file, extractPath);
+
+            var expectedFiles = new List<string>
             {
-                Directory.CreateDirectory(TEST_RESOURCES_FOLDER);
-            }
-        }
+                $@"{extractPath}\xl\workbook.xml",
+                $@"{extractPath}\xl\sharedStrings.xml",
+                $@"{extractPath}\xl\styles.xml"
+            };
 
-        [Fact]
-        public void ShouldCreateWorkbookWithNoSheets()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldCreateWorkbookWithNoSheets.xlsx");            
-            Assert.Equal(0, workbook.GetSheetCount());
-        }
+            Assert.Equal(3, extractedFiles.Where(x => expectedFiles.Contains(x)).Count());
 
-        [Fact]
-        public void ShouldAddSheetWithDefaultName()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldAddSheetWithDefaultName.xlsx");
-            workbook.AddSheet();
-            Assert.NotNull(workbook.GetSheet("Sheet1"));
-        }
+            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}\ShouldGenerateWorkbook";
 
-        [Fact]
-        public void ShouldAddSheetWithGivenName()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldAddSheetWithGivenName.xlsx");
-            workbook.AddSheet("NewSheet");
-            Assert.NotNull(workbook.GetSheet("NewSheet"));
-        }
-
-        [Fact]
-        public void ShouldThrowExceptionWhenAddingSheetIfNameAlreadyExists()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldThrowExceptionWhenAddingSheetIfNameAlreadyExists.xlsx");
-            workbook.AddSheet("NewSheet");
-            Assert.Throws<Exception>(() => workbook.AddSheet("NewSheet"));
-        }
-
-        [Fact]
-        public void ShouldReturnNullIfSheetDoesNotExist()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldReturnNullIfSheetDoesNotExist.xlsx");
-            workbook.AddSheet("NewSheet");
-            Assert.Null(workbook.GetSheet("OldSheet"));
-        }
-
-        [Fact]
-        public void ShouldGetSheetCount()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldGetSheetCount.xlsx");
-            workbook.AddSheet("Sheet1");
-            workbook.AddSheet("Sheet2");
-            workbook.AddSheet("Sheet3");
-            Assert.Equal(3, workbook.GetSheetCount());
-        }
-
-        [Fact]
-        public void ShouldSaveAndCloseWorkbook()
-        {
-            var workbook = new EZWorkbook($"{TEST_RESOURCES_FOLDER}/ShouldSaveAndCloseWorkbook.xlsx");
-            workbook.AddSheet("Sheet1");
-            workbook.Save();
-            File.Delete($"{TEST_RESOURCES_FOLDER}/ShouldSaveAndCloseWorkbook.xlsx");
+            TestHelper.AssertFiles($@"{expectedXmlFolder}\workbook.xml", expectedFiles[0]);
+            TestHelper.AssertFiles($@"{expectedXmlFolder}\sharedStrings.xml", expectedFiles[1]);
+            TestHelper.AssertFiles($@"{expectedXmlFolder}\styles.xml", expectedFiles[2]);
         }
     }
 }
