@@ -28,6 +28,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Expected-XML\ShouldAddCellsInSameRow.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Expected-XML\ShouldAddCellsInSameColumn.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Expected-XML\ShouldAddworksheets.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Expected-XML\ShouldGenerateWorkbook\sharedStrings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -35,6 +44,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Expected-XML\ShouldGenerateWorkbook\workbook.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Expected-XML\ShouldRandomlyAddCells.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

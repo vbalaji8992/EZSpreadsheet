@@ -47,7 +47,7 @@ namespace EZSpreadsheet.Tests
             return extractedFiles;
         }
 
-        public static void AssertFiles(string expectedFile, string actualFile)
+        public static void AssertFile(string expectedFile, string actualFile)
         {
             var expectedFileFormatted = GetFormattedFile(File.ReadAllText(expectedFile));
             var actualFileFormatted = File.ReadAllText(actualFile).Replace(" ", "");
