@@ -34,6 +34,9 @@
     <None Update="Expected-XML\ShouldAddCellsInSameColumn.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Expected-XML\ShouldAddRangeOfCells.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Expected-XML\ShouldAddworksheets.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

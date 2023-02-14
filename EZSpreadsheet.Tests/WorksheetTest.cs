@@ -140,5 +140,121 @@ namespace EZSpreadsheet.Tests
 
             TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
         }
+
+        [Fact]
+        public void ShouldAddRangeOfCells1()
+        {
+            var testName = "ShouldAddRangeOfCells";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}1.xlsx";
+            var wb = new EZWorkbook(file);
+            var ws1 = wb.AddSheet("sheet1");
+            var ws2 = wb.AddSheet("sheet2");
+
+            ws1.GetRange("a1", "j10");
+            ws2.GetRange("j10", "a1");
+
+            wb.Save();
+
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}1";
+            TestHelper.ExtractFiles(file, extractPath);
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet2.xml");
+        }
+
+        [Fact]
+        public void ShouldAddRangeOfCells2()
+        {
+            var testName = "ShouldAddRangeOfCells";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}2.xlsx";
+            var wb = new EZWorkbook(file);
+            var ws1 = wb.AddSheet("sheet1");
+            var ws2 = wb.AddSheet("sheet2");
+
+            ws1.GetRange(1, 1, 10, 10);
+            ws2.GetRange(10, 10, 1, 1);
+
+            wb.Save();
+
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}2";
+            TestHelper.ExtractFiles(file, extractPath);
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet2.xml");
+        }
+
+        [Fact]
+        public void ShouldGetFirstAndLastRowIndex()
+        {
+            var testName = "ShouldGetFirstAndLastRowIndex";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var wb = new EZWorkbook(file);
+            var ws = wb.AddSheet("sheet1");
+
+            ws.GetCell("D4");
+            ws.GetCell("A34");
+
+            Assert.Equal((uint)4, ws.GetFirstRowIndex());
+            Assert.Equal((uint)34, ws.GetLastRowIndex());
+        }
+
+        [Fact]
+        public void ShouldGetFirstAndLastColumnIndex()
+        {
+            var testName = "ShouldGetFirstAndLastColumnIndex";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var wb = new EZWorkbook(file);
+            var ws = wb.AddSheet("sheet1");
+
+            ws.GetCell("J4");
+            ws.GetCell("C34");
+
+            Assert.Equal((uint)3, ws.GetFirstColumnIndex());
+            Assert.Equal((uint)10, ws.GetLastColumnIndex());
+        }
+
+        [Fact]
+        public void ShouldGetFirstAndLastColumnName()
+        {
+            var testName = "ShouldGetFirstAndLastColumnName";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var wb = new EZWorkbook(file);
+            var ws = wb.AddSheet("sheet1");
+
+            ws.GetCell("J4");
+            ws.GetCell("C34");
+
+            Assert.Equal("C", ws.GetFirstColumnName());
+            Assert.Equal("J", ws.GetLastColumnName());
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionIfSheetIsEmpty()
+        {
+            var testName = "ShouldThrowExceptionIfSheetIsEmpty";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var wb = new EZWorkbook(file);
+            var ws = wb.AddSheet("sheet1");
+
+            Assert.Throws<Exception>(() => ws.GetFirstRowIndex());
+            Assert.Throws<Exception>(() => ws.GetLastRowIndex());
+            Assert.Throws<Exception>(() => ws.GetFirstColumnIndex());
+            Assert.Throws<Exception>(() => ws.GetLastColumnIndex());
+            Assert.Throws<Exception>(() => ws.GetFirstColumnName());
+            Assert.Throws<Exception>(() => ws.GetLastColumnName());
+        }
+
+        [Fact]
+        public void ShouldGetSheetName()
+        {
+            var testName = "ShouldGetSheetName";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var wb = new EZWorkbook(file);
+            var ws = wb.AddSheet("NewSheet1234");
+
+            Assert.Equal("NewSheet1234", ws.GetSheetName());
+        }
     }
 }
