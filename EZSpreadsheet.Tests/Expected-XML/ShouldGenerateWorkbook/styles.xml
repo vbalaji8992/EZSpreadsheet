@@ -2,28 +2,28 @@
 <x:styleSheet xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
   <x:fonts count="1">
     <x:font>
-      <x:sz val="11"/>
-      <x:color indexed="0"/>
-      <x:name val="Calibri"/>
+      <x:sz val="11" />
+      <x:color indexed="0" />
+      <x:name val="Calibri" />
     </x:font>
   </x:fonts>
-  <x:fills count="2">
+  <x:fills>
     <x:fill>
-      <x:patternFill patternType="gray125"/>
+      <x:patternFill patternType="none" />
     </x:fill>
     <x:fill>
-      <x:patternFill patternType="none"/>
+      <x:patternFill patternType="gray125" />
     </x:fill>
   </x:fills>
   <x:borders count="1">
     <x:border>
-      <x:left style="none"/>
-      <x:right style="none"/>
-      <x:top style="none"/>
-      <x:bottom style="none"/>
+      <x:left style="none" />
+      <x:right style="none" />
+      <x:top style="none" />
+      <x:bottom style="none" />
     </x:border>
   </x:borders>
   <x:cellXfs count="1">
-    <x:xf numFmtId="0" fontId="0" fillId="1" borderId="0" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
+    <x:xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyFont="1" applyFill="1" applyBorder="1" />
   </x:cellXfs>
 </x:styleSheet>

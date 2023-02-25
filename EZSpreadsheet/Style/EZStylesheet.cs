@@ -117,12 +117,13 @@ namespace EZSpreadsheet.Style
             {
                 fills.Append(new Fill()
                 {
-                    PatternFill = new PatternFill() { PatternType = PatternValues.Gray125 }
+                    PatternFill = new PatternFill() { PatternType = PatternValues.None }
                 });
                 fills.Append(new Fill()
                 {
-                    PatternFill = new PatternFill() { PatternType = PatternValues.None }
+                    PatternFill = new PatternFill() { PatternType = PatternValues.Gray125 }
                 });
+                return 0;
             }
             else
             {
@@ -134,10 +135,9 @@ namespace EZSpreadsheet.Style
                         ForegroundColor = new ForegroundColor() { Indexed = (uint)cellStyle.FillColor }
                     }
                 });
-            }
-
-            fills.Count = (uint)fills.ChildElements.Count;
-            return fills.Count - 1;
+                fills.Count = (uint)fills.ChildElements.Count;
+                return fills.Count - 1;
+            }            
         }
 
         internal uint AppendCellFormat(EZStyle cellStyle)

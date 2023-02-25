@@ -20,14 +20,6 @@ worksheet.GetCell("b2")
     .InsertData(list, true)
     .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.TimesNewRoman });
 
-worksheet.GetCell("a", 1)
-    .SetValue<double?>(12.345678)
-    .SetStyle(new EZStyle { FillColor = EZColor.Green, NumberFormatId = 2, Font = EZFont.Arial });
-
-worksheet.GetCell("a", 2)
-    .SetValue<string?>(null)
-    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.Century, FontSize = 50 });
-
 worksheet.GetCell("f6")
     .SetFormula("SUM(B3:D11)");
 
@@ -35,6 +27,25 @@ worksheet.GetCell("f2")
     .SetFormula("CONCATENATE(B2,C2,D2)");
 
 worksheet.GetRange("j11", "e2").SetStyle(new EZStyle { FillColor = EZColor.Pink });
+
+worksheet.GetCell("a", 13)
+    .SetValue<int?>(123);
+
+worksheet.GetCell("a", 14)
+    .SetValue<int?>(123)
+    .SetStyle(new EZStyle { NumberFormatId = 2 });
+
+worksheet.GetCell("a", 15)
+    .SetValue<double?>(12.345678)
+    .SetStyle(new EZStyle { NumberFormatId = 2 });
+
+worksheet.GetCell("a", 16)
+    .SetValue<double?>(12.345678)
+    .SetStyle(new EZStyle { FillColor = EZColor.Green, NumberFormatId = 2, Font = EZFont.Arial });
+
+worksheet.GetCell("a", 17)
+    .SetValue<string?>(null)
+    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.Century, FontSize = 50 });
 
 workbook.Save();
 
