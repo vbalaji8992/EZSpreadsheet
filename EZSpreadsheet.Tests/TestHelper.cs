@@ -44,7 +44,7 @@ namespace EZSpreadsheet.Tests
 
             var extractedFiles = Directory.GetFiles(extractPath, "*.*", SearchOption.AllDirectories).ToList();
                        
-            return extractedFiles;
+            return extractedFiles.Select(x => x.Replace("\\", "/")).ToList();
         }
 
         public static void AssertFile(string expectedFile, string actualFile)

@@ -16,7 +16,7 @@ namespace EZSpreadsheet.Tests
         [Fact]
         public void ShouldSetTextInACell() 
         {
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\ShouldSetTextInACell.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldSetTextInACell.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
             wb.Save();

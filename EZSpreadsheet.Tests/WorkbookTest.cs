@@ -21,51 +21,51 @@ namespace EZSpreadsheet.Tests
         [Fact]
         public void ShouldGenerateWorkbook()
         {
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\ShouldGenerateWorkbook.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldGenerateWorkbook.xlsx";
             var wb = new EZWorkbook(file);
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\ShouldGenerateWorkbook";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldGenerateWorkbook";
             var extractedFiles = TestHelper.ExtractFiles(file, extractPath);
 
             var expectedFiles = new List<string>
             {
-                $@"{extractPath}\xl\workbook.xml",
-                $@"{extractPath}\xl\sharedStrings.xml",
-                $@"{extractPath}\xl\styles.xml"
+                $@"{extractPath}/xl/workbook.xml",
+                $@"{extractPath}/xl/sharedStrings.xml",
+                $@"{extractPath}/xl/styles.xml"
             };
 
             Assert.Equal(3, extractedFiles.Where(x => expectedFiles.Contains(x)).Count());
 
-            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}\ShouldGenerateWorkbook";
+            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldGenerateWorkbook";
 
-            TestHelper.AssertFile($@"{expectedXmlFolder}\workbook.xml", expectedFiles[0]);
-            TestHelper.AssertFile($@"{expectedXmlFolder}\sharedStrings.xml", expectedFiles[1]);
-            TestHelper.AssertFile($@"{expectedXmlFolder}\styles.xml", expectedFiles[2]);
+            TestHelper.AssertFile($@"{expectedXmlFolder}/workbook.xml", expectedFiles[0]);
+            TestHelper.AssertFile($@"{expectedXmlFolder}/sharedStrings.xml", expectedFiles[1]);
+            TestHelper.AssertFile($@"{expectedXmlFolder}/styles.xml", expectedFiles[2]);
         }
 
         [Fact]
         public void ShouldAddworksheets()
         {
             var testName = "ShouldAddworksheets";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             wb.AddSheet("sheet1");
             wb.AddSheet("sheet2");
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
             var extractedFiles = TestHelper.ExtractFiles(file, extractPath);
 
             var expectedFiles = new List<string>
             {
-                $@"{extractPath}\xl\worksheets\sheet1.xml",
-                $@"{extractPath}\xl\worksheets\sheet2.xml"
+                $@"{extractPath}/xl/worksheets/sheet1.xml",
+                $@"{extractPath}/xl/worksheets/sheet2.xml"
             };
 
             Assert.Equal(2, extractedFiles.Where(x => expectedFiles.Contains(x)).Count());
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
 
             expectedFiles.ForEach(file => TestHelper.AssertFile(expectedXmlFile, file));            
         }

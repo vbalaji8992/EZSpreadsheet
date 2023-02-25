@@ -50,7 +50,7 @@ namespace EZSpreadsheet.Tests
         public void ShouldAddCellsInSameColumn1() 
         {
             var testName = "ShouldAddCellsInSameColumn";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");           
 
@@ -62,18 +62,18 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
             TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
 
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
         }
 
         [Fact]
         public void ShouldAddCellsInSameColumn2()
         {
             var testName = "ShouldAddCellsInSameColumn";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
 
@@ -88,18 +88,18 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
             TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
 
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
         }
 
         [Fact]
         public void ShouldAddCellsInSameRow()
         {
             var testName = "ShouldAddCellsInSameRow";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
 
@@ -111,18 +111,18 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
             TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
 
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
         }
 
         [Fact]
         public void ShouldRandomlyAddCells()
         {
             var testName = "ShouldRandomlyAddCells";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
 
@@ -134,18 +134,18 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
             TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
 
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
         }
 
         [Fact]
         public void ShouldAddRangeOfCells1()
         {
             var testName = "ShouldAddRangeOfCells";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}1.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}1.xlsx";
             var wb = new EZWorkbook(file);
             var ws1 = wb.AddSheet("sheet1");
             var ws2 = wb.AddSheet("sheet2");
@@ -155,19 +155,19 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}1";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}1";
             TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
 
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet2.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet2.xml");
         }
 
         [Fact]
         public void ShouldAddRangeOfCells2()
         {
             var testName = "ShouldAddRangeOfCells";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}2.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}2.xlsx";
             var wb = new EZWorkbook(file);
             var ws1 = wb.AddSheet("sheet1");
             var ws2 = wb.AddSheet("sheet2");
@@ -177,19 +177,19 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}2";
+            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}2";
             TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}\{testName}.xml";
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
 
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet1.xml");
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}\xl\worksheets\sheet2.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
+            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet2.xml");
         }
 
         [Fact]
         public void ShouldGetFirstAndLastRowIndex()
         {
             var testName = "ShouldGetFirstAndLastRowIndex";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
 
@@ -204,7 +204,7 @@ namespace EZSpreadsheet.Tests
         public void ShouldGetFirstAndLastColumnIndex()
         {
             var testName = "ShouldGetFirstAndLastColumnIndex";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
 
@@ -219,7 +219,7 @@ namespace EZSpreadsheet.Tests
         public void ShouldGetFirstAndLastColumnName()
         {
             var testName = "ShouldGetFirstAndLastColumnName";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
 
@@ -234,7 +234,7 @@ namespace EZSpreadsheet.Tests
         public void ShouldThrowExceptionIfSheetIsEmpty()
         {
             var testName = "ShouldThrowExceptionIfSheetIsEmpty";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("sheet1");
 
@@ -250,7 +250,7 @@ namespace EZSpreadsheet.Tests
         public void ShouldGetSheetName()
         {
             var testName = "ShouldGetSheetName";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}\{testName}.xlsx";
+            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
             var wb = new EZWorkbook(file);
             var ws = wb.AddSheet("NewSheet1234");
 
