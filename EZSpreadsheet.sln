@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EZSpreadsheet", "EZSpreadsheet\EZSpreadsheet.csproj", "{CB7D8D4E-4E42-42CB-A5A8-4788C5C65EFB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EZSpreadsheet.Examples", "EZTest\EZSpreadsheet.Examples.csproj", "{A69D03D7-8548-4913-BA9A-D76DBE4C80FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EZSpreadsheet.Examples", "EZSpreadsheet.Examples\EZSpreadsheet.Examples.csproj", "{A69D03D7-8548-4913-BA9A-D76DBE4C80FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EZSpreadsheet.Tests", "EZSpreadsheet.Tests\EZSpreadsheet.Tests.csproj", "{B3F1CD34-31F8-46D6-85DC-924A1565D9D9}"
 EndProject
