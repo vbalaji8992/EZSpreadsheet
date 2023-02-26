@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<x:worksheet xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <x:sheetData>
+    <x:row r="1">
+      <x:c r="A1" t="n">
+        <x:v>1</x:v>
+      </x:c>
+      <x:c r="B1" t="n">
+        <x:v>12.34</x:v>
+      </x:c>
+    </x:row>
+  </x:sheetData>
+</x:worksheet>

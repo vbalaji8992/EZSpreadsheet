@@ -117,7 +117,7 @@ namespace EZSpreadsheet
             {
                 try
                 {
-                    SetValue(Convert.ToInt32(kvp.Key));
+                    SetValue(Convert.ToDouble(kvp.Key));
                 }
                 catch (Exception)
                 {

@@ -40,6 +40,9 @@
     <None Update="Expected-XML\ShouldAddworksheets.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Expected-XML\ShouldConvertTextToNumber.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Expected-XML\ShouldGenerateWorkbook\sharedStrings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -49,7 +52,22 @@
     <None Update="Expected-XML\ShouldGenerateWorkbook\workbook.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Expected-XML\ShouldNotDuplicateValuesInSharedString\sharedStrings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Expected-XML\ShouldNotDuplicateValuesInSharedString\sheet1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Expected-XML\ShouldRandomlyAddCells.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Expected-XML\ShouldSetIntegerValues.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Expected-XML\ShouldSetValueAsStringInCell\sharedStrings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Expected-XML\ShouldSetValueAsStringInCell\sheet1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
