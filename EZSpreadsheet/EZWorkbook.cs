@@ -13,16 +13,26 @@ namespace EZSpreadsheet
     public class EZWorkbook
     {
         internal SpreadsheetDocument SpreadsheetDocument { get; }
-        internal Sheets Sheets { get; }
-        internal List<EZWorksheet> Worksheets { get; }
-        internal EZSharedString SharedString { get; }
-        internal EZStylesheet StyleSheet { get; }
+        internal Sheets Sheets { get; private set; }
+        internal List<EZWorksheet> Worksheets { get; private set; }
+        internal EZSharedString SharedString { get; private set; }
+        internal EZStylesheet StyleSheet { get; private set; }
         internal uint NextAvailableSheetId { get; private set; } = 1;
 
         public EZWorkbook(string filepath)
         {
             SpreadsheetDocument = SpreadsheetDocument.Create(filepath, SpreadsheetDocumentType.Workbook);
+            CreateWorkbook();
+        }
 
+        public EZWorkbook(Stream stream) 
+        {
+            SpreadsheetDocument = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook);
+            CreateWorkbook();
+        }
+
+        private void CreateWorkbook()
+        {
             SpreadsheetDocument.AddWorkbookPart();
             SpreadsheetDocument.WorkbookPart!.Workbook = new Workbook();
 

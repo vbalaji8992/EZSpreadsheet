@@ -1,10 +1,13 @@
-﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
+﻿using DocumentFormat.OpenXml.Vml.Office;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit.Sdk;
 
 namespace EZSpreadsheet.Tests
 {
@@ -29,9 +32,9 @@ namespace EZSpreadsheet.Tests
             }
         }
 
-        public static string GetFormattedFile(string expectedStylesheet)
+        public static string GetFormattedXml(string xml)
         {
-            return expectedStylesheet.Replace("\n", "")
+            return xml.Replace("\n", "")
                 .Replace("\r", "")
                 .Replace("\t", "")
                 .Replace(" ", "");
@@ -49,9 +52,26 @@ namespace EZSpreadsheet.Tests
 
         public static void AssertFile(string expectedFile, string actualFile)
         {
-            var expectedFileFormatted = GetFormattedFile(File.ReadAllText(expectedFile));
+            var expectedFileFormatted = GetFormattedXml(File.ReadAllText(expectedFile));
             var actualFileFormatted = File.ReadAllText(actualFile).Replace(" ", "");
             Assert.Equal(expectedFileFormatted, actualFileFormatted);
+        }
+
+        public static void AssertXml(string expectedXmlPath, string actualXmlPath, Stream stream)
+        {
+            var archive = new ZipArchive(stream);
+            var actualFile = archive.Entries.Where(x => x.FullName == actualXmlPath).FirstOrDefault();
+
+            if (actualFile == null)
+                throw new XunitException("Zip file does not contain the specified file");
+
+            var reader = new StreamReader(actualFile.Open());
+            var actualXml = reader.ReadToEnd();
+
+            var expectedXmlFormatted = GetFormattedXml(File.ReadAllText(expectedXmlPath));
+            var actualXmlFormatted = GetFormattedXml(actualXml);
+
+            Assert.Equal(expectedXmlFormatted, actualXmlFormatted);
         }
     }
 }
