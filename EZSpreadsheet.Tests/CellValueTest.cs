@@ -11,74 +11,57 @@ namespace EZSpreadsheet.Tests
     {
         public CellValueTest()
         {
-            TestHelper.CreateFolder(TestHelper.TEST_OUTPUT_FOLDER);
         }
 
         [Fact]
         public void ShouldSetValueAsStringInCell1() 
         {
-            var testName = "ShouldSetValueAsStringInCell";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
-            var wb = new EZWorkbook(file);
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
             ws.GetCell(1, 1).SetValue("Text1");
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
-            TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile1 = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}/sheet1.xml";
-            var expectedXmlFile2 = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}/sharedStrings.xml";
-
-            TestHelper.AssertFile(expectedXmlFile1, $@"{extractPath}/xl/worksheets/sheet1.xml");
-            TestHelper.AssertFile(expectedXmlFile2, $@"{extractPath}/xl/sharedStrings.xml");
+            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldSetValueAsStringInCell";
+            TestHelper.AssertXml($"{expectedXmlFolder}/sheet1.xml", "xl/worksheets/sheet1.xml", memoryStream);            
+            TestHelper.AssertXml($"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);            
         }
 
         [Fact]
         public void ShouldSetValueAsStringInCell2()
         {
-            var testName = "ShouldSetValueAsStringInCell";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
-            var wb = new EZWorkbook(file);
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
             ws.GetCell(1, 1).SetValue<string?>("Text1");
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
-            TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile1 = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}/sheet1.xml";
-            var expectedXmlFile2 = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}/sharedStrings.xml";
-
-            TestHelper.AssertFile(expectedXmlFile1, $@"{extractPath}/xl/worksheets/sheet1.xml");
-            TestHelper.AssertFile(expectedXmlFile2, $@"{extractPath}/xl/sharedStrings.xml");
+            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldSetValueAsStringInCell";
+            TestHelper.AssertXml($"{expectedXmlFolder}/sheet1.xml", "xl/worksheets/sheet1.xml", memoryStream);
+            TestHelper.AssertXml($"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);
         }
 
         [Fact]
         public void ShouldNotDuplicateValuesInSharedString()
         {
-            var testName = "ShouldNotDuplicateValuesInSharedString";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
-            var wb = new EZWorkbook(file);
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
             ws.GetCell(1, 1).SetValue("Text1");
             ws.GetCell(1, 2).SetValue<string?>("Text1");
             ws.GetCell(2, 2).SetValue("Text1");
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
-            TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile1 = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}/sheet1.xml";
-            var expectedXmlFile2 = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}/sharedStrings.xml";
-
-            TestHelper.AssertFile(expectedXmlFile1, $@"{extractPath}/xl/worksheets/sheet1.xml");
-            TestHelper.AssertFile(expectedXmlFile2, $@"{extractPath}/xl/sharedStrings.xml");
+            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldNotDuplicateValuesInSharedString";
+            TestHelper.AssertXml($"{expectedXmlFolder}/sheet1.xml", "xl/worksheets/sheet1.xml", memoryStream);
+            TestHelper.AssertXml($"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);
         }
 
         [Fact]
         public void ShouldSetIntegerValues()
         {
-            var testName = "ShouldSetIntegerValues";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
-            var wb = new EZWorkbook(file);
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
             ws.GetCell(1, 1).SetValue(1);
             ws.GetCell(1, 2).SetValue<int?>(2);
@@ -88,37 +71,28 @@ namespace EZSpreadsheet.Tests
             ws.GetCell(1, 6).SetValue<float?>(78.90f);
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
-            TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
-
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldSetIntegerValues.xml";
+            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
         }
 
         [Fact]
         public void ShouldConvertTextToNumber()
         {
-            var testName = "ShouldConvertTextToNumber";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
-            var wb = new EZWorkbook(file);
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
             ws.GetCell(1, 1).SetValue("1").ConvertToNumber();
             ws.GetCell(1, 2).SetValue("12.34").ConvertToNumber();
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
-            TestHelper.ExtractFiles(file, extractPath);
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
-
-            TestHelper.AssertFile(expectedXmlFile, $@"{extractPath}/xl/worksheets/sheet1.xml");
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldConvertTextToNumber.xml";
+            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
         }
 
         [Fact]
         public void ShouldNotThrowExceptionForStringToNumberConversion()
         {
-            var testName = "ShouldNotThrowExceptionForStringToNumberConversion";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
-            var wb = new EZWorkbook(file);
+            var wb = new EZWorkbook(new MemoryStream());
             var ws = wb.AddSheet("sheet1");
             ws.GetCell(1, 1).SetValue("text").ConvertToNumber();
             wb.Save();

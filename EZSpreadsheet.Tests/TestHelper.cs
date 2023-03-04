@@ -13,24 +13,7 @@ namespace EZSpreadsheet.Tests
 {
     public static class TestHelper
     {
-        public const string TEST_OUTPUT_FOLDER = "Test-Output";
         public const string EXPECTED_XML_FOLDER = "Expected-XML";
-
-        public static void CreateFolder(string folder)
-        {
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
-        }
-
-        public static void DeleteFolder(string folder)
-        {
-            if (Directory.Exists(folder))
-            {
-                Directory.Delete(folder, true);
-            }
-        }
 
         public static string GetFormattedXml(string xml)
         {
@@ -38,23 +21,6 @@ namespace EZSpreadsheet.Tests
                 .Replace("\r", "")
                 .Replace("\t", "")
                 .Replace(" ", "");
-        }
-
-        public static List<string> ExtractFiles(string file, string extractPath)
-        {
-            DeleteFolder(extractPath);
-            ZipFile.ExtractToDirectory(file, extractPath);
-
-            var extractedFiles = Directory.GetFiles(extractPath, "*.*", SearchOption.AllDirectories).ToList();
-                       
-            return extractedFiles.Select(x => x.Replace("\\", "/")).ToList();
-        }
-
-        public static void AssertFile(string expectedFile, string actualFile)
-        {
-            var expectedFileFormatted = GetFormattedXml(File.ReadAllText(expectedFile));
-            var actualFileFormatted = File.ReadAllText(actualFile).Replace(" ", "");
-            Assert.Equal(expectedFileFormatted, actualFileFormatted);
         }
 
         public static void AssertXml(string expectedXmlPath, string actualXmlPath, Stream stream)

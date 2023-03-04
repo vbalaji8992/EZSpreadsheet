@@ -15,65 +15,39 @@ namespace EZSpreadsheet.Tests
         public WorkbookTest(ITestOutputHelper output)
         {
             this.output = output;
-            TestHelper.CreateFolder(TestHelper.TEST_OUTPUT_FOLDER);
         }        
 
         [Fact]
         public void ShouldGenerateWorkbook()
         {
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldGenerateWorkbook.xlsx";
-            var wb = new EZWorkbook(file);
-            wb.Save();
-
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldGenerateWorkbook";
-            var extractedFiles = TestHelper.ExtractFiles(file, extractPath);
-
-            var expectedFiles = new List<string>
-            {
-                $@"{extractPath}/xl/workbook.xml",
-                $@"{extractPath}/xl/sharedStrings.xml",
-                $@"{extractPath}/xl/styles.xml"
-            };
-
-            Assert.Equal(3, extractedFiles.Where(x => expectedFiles.Contains(x)).Count());
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            wb.Save();         
 
             var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldGenerateWorkbook";
-
-            TestHelper.AssertFile($@"{expectedXmlFolder}/workbook.xml", expectedFiles[0]);
-            TestHelper.AssertFile($@"{expectedXmlFolder}/sharedStrings.xml", expectedFiles[1]);
-            TestHelper.AssertFile($@"{expectedXmlFolder}/styles.xml", expectedFiles[2]);
+            TestHelper.AssertXml($@"{expectedXmlFolder}/workbook.xml", "xl/workbook.xml", memoryStream);
+            TestHelper.AssertXml($@"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);
+            TestHelper.AssertXml($@"{expectedXmlFolder}/styles.xml", "xl/styles.xml", memoryStream);
         }
 
         [Fact]
         public void ShouldAddworksheets()
         {
-            var testName = "ShouldAddworksheets";
-            var file = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}.xlsx";
-            var wb = new EZWorkbook(file);
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
             wb.AddSheet("sheet1");
             wb.AddSheet("sheet2");
             wb.Save();
 
-            var extractPath = $@"{TestHelper.TEST_OUTPUT_FOLDER}/{testName}";
-            var extractedFiles = TestHelper.ExtractFiles(file, extractPath);
-
-            var expectedFiles = new List<string>
-            {
-                $@"{extractPath}/xl/worksheets/sheet1.xml",
-                $@"{extractPath}/xl/worksheets/sheet2.xml"
-            };
-
-            Assert.Equal(2, extractedFiles.Where(x => expectedFiles.Contains(x)).Count());
-
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/{testName}.xml";
-
-            expectedFiles.ForEach(file => TestHelper.AssertFile(expectedXmlFile, file));            
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddworksheets.xml";
+            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet2.xml", memoryStream);
         }
 
         [Fact]
         public void ShouldThrowExceptionWhenAddingSheetIfNameAlreadyExists()
         {
-            var workbook = new EZWorkbook($"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldThrowExceptionWhenAddingSheetIfNameAlreadyExists.xlsx");
+            var workbook = new EZWorkbook(new MemoryStream());
             workbook.AddSheet("NewSheet");
             Assert.Throws<Exception>(() => workbook.AddSheet("NewSheet"));
         }
@@ -81,7 +55,7 @@ namespace EZSpreadsheet.Tests
         [Fact]
         public void ShouldGetSheet()
         {
-            var workbook = new EZWorkbook($"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldGetSheet.xlsx");
+            var workbook = new EZWorkbook(new MemoryStream());
             workbook.AddSheet("NewSheet");
             Assert.NotNull(workbook.GetSheet("NewSheet"));
         }
@@ -89,7 +63,7 @@ namespace EZSpreadsheet.Tests
         [Fact]
         public void ShouldReturnNullIfSheetDoesNotExist()
         {
-            var workbook = new EZWorkbook($"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldReturnNullIfSheetDoesNotExist.xlsx");
+            var workbook = new EZWorkbook(new MemoryStream());
             workbook.AddSheet("NewSheet");
             Assert.Null(workbook.GetSheet("OldSheet"));
         }
@@ -97,7 +71,7 @@ namespace EZSpreadsheet.Tests
         [Fact]
         public void ShouldGetSheetCount()
         {
-            var workbook = new EZWorkbook($"{TestHelper.TEST_OUTPUT_FOLDER}/ShouldGetSheetCount.xlsx");
+            var workbook = new EZWorkbook(new MemoryStream());
             workbook.AddSheet("Sheet1");
             workbook.AddSheet("Sheet2");
             workbook.AddSheet("Sheet3");
