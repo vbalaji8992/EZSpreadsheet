@@ -125,6 +125,23 @@ namespace EZSpreadsheet.Tests
         }
 
         [Fact]
+        public void ShouldAddCellsinColumnsAfterZ()
+        {
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            var ws = wb.AddSheet("sheet1");
+
+            ws.GetCell(1, 1);
+            ws.GetCell(1, 26);
+            ws.GetCell(1, 100);
+
+            wb.Save();
+
+            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddCellsinColumnsAfterZ.xml";
+            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+        }
+
+        [Fact]
         public void ShouldAddRangeOfCells1()
         {
             var memoryStream = new MemoryStream();

@@ -16,7 +16,7 @@ namespace EZSpreadsheet
         internal Worksheet Worksheet { get; set; }
         internal Sheet Sheet { get; set; }
         internal SheetData SheetData { get; set; }
-        internal Dictionary<uint, List<EZCell>> CellListByRowIndex { get; }
+        internal Dictionary<uint, Dictionary<uint, EZCell>> CellsyRowColumnIndex { get; }
 
         internal EZWorksheet(EZWorkbook workBook, string? sheetName)
         {
@@ -37,20 +37,23 @@ namespace EZSpreadsheet
             Worksheet = worksheetPart.Worksheet;
             Sheet = sheet;
             SheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
-            CellListByRowIndex = new Dictionary<uint, List<EZCell>>();
+            CellsyRowColumnIndex = new Dictionary<uint, Dictionary<uint, EZCell>>();
         }
 
         public EZCell GetCell(string columnName, uint rowIndex)
         {
             columnName = columnName.ToUpper();
+            var columnIndex = EZIndex.GetColumnIndex(columnName);
 
             EZIndex.CheckForInvalidIndex(columnName, rowIndex);
 
             EZCell? excelCell = null;
 
-            if (CellListByRowIndex.ContainsKey(rowIndex))
+            if (CellsyRowColumnIndex.ContainsKey(rowIndex))
             {
-                excelCell = CellListByRowIndex[rowIndex].Where(x => x.ColumnName == columnName && x.RowIndex == rowIndex).FirstOrDefault();
+                var rowCells = CellsyRowColumnIndex[rowIndex];
+                if (rowCells.ContainsKey(columnIndex))
+                    excelCell = rowCells[columnIndex];
             }
 
             if (excelCell != null)
@@ -79,7 +82,7 @@ namespace EZSpreadsheet
 
         private EZCell AddCell(string columnName, uint rowIndex)
         {
-            if (!CellListByRowIndex.ContainsKey(rowIndex))
+            if (!CellsyRowColumnIndex.ContainsKey(rowIndex))
             {
                 return AddRowAndAppendCell(columnName, rowIndex);
             }
@@ -92,16 +95,21 @@ namespace EZSpreadsheet
         private EZCell AppendCellToRow(string columnName, uint rowIndex)
         {
             string cellReference = columnName + rowIndex;
+            var columnIndex = EZIndex.GetColumnIndex(columnName);
 
-            var cellsWithRowIndex = CellListByRowIndex[rowIndex];
+            var cellsWithRowIndex = CellsyRowColumnIndex[rowIndex];
             EZCell? refCell = null;
 
-            foreach (var cell in cellsWithRowIndex)
+            var maxCol = cellsWithRowIndex.Keys.Max()!;
+            if (columnIndex < maxCol)
             {
-                if (string.Compare(cell.CellReference, cellReference, true) > 0)
+                foreach (var kvp in cellsWithRowIndex)
                 {
-                    refCell = cell;
-                    break;
+                    if (kvp.Key > columnIndex)
+                    {
+                        refCell = kvp.Value;
+                        break;
+                    }
                 }
             }
 
@@ -110,7 +118,7 @@ namespace EZSpreadsheet
 
             if (refCell == null)
             {
-                row = cellsWithRowIndex.First().Row;
+                row = cellsWithRowIndex.First().Value.Row;
                 row.Append(newCell);
             }
             else
@@ -120,7 +128,7 @@ namespace EZSpreadsheet
             }
 
             EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
-            CellListByRowIndex[rowIndex].Add(excelCell);
+            CellsyRowColumnIndex[rowIndex].Add(columnIndex, excelCell);
 
             return excelCell;
         }
@@ -128,10 +136,11 @@ namespace EZSpreadsheet
         private EZCell AddRowAndAppendCell(string columnName, uint rowIndex)
         {
             string cellReference = columnName + rowIndex;
+            var columnIndex = EZIndex.GetColumnIndex(columnName);
 
-            Row row = new Row() { RowIndex = rowIndex };          
+            Row row = new Row() { RowIndex = rowIndex };   
 
-            var maxRow = (CellListByRowIndex.Count > 0) ? CellListByRowIndex.Keys.Max() : 0;
+            var maxRow = (CellsyRowColumnIndex.Count > 0) ? CellsyRowColumnIndex.Keys.Max() : 0;
             Row? refRow = null;
             if (rowIndex < maxRow)
             {
@@ -152,7 +161,7 @@ namespace EZSpreadsheet
             row.Append(newCell);
 
             EZCell excelCell = new EZCell(rowIndex, columnName, row, newCell, this);
-            CellListByRowIndex.Add(rowIndex, new List<EZCell> { excelCell });
+            CellsyRowColumnIndex.Add(rowIndex, new Dictionary<uint, EZCell> { { columnIndex, excelCell } });
 
             return excelCell;
         }
@@ -217,13 +226,13 @@ namespace EZSpreadsheet
         {
             uint firstColumnIndex = EZIndex.MaxColumnIndex;
 
-            foreach (var kvp in CellListByRowIndex)
+            foreach (var kvp in CellsyRowColumnIndex)
             {               
                 foreach(var cell in kvp.Value)
                 {
-                    if (cell.ColumnIndex < firstColumnIndex)
+                    if (cell.Value.ColumnIndex < firstColumnIndex)
                     {
-                        firstColumnIndex = cell.ColumnIndex;
+                        firstColumnIndex = cell.Value.ColumnIndex;
                     }
                 }
             }
@@ -240,13 +249,13 @@ namespace EZSpreadsheet
         {
             uint lastColumnIndex = 0;
 
-            foreach (var kvp in CellListByRowIndex)
+            foreach (var kvp in CellsyRowColumnIndex)
             {
                 foreach (var cell in kvp.Value)
                 {
-                    if (cell.ColumnIndex > lastColumnIndex)
+                    if (cell.Value.ColumnIndex > lastColumnIndex)
                     {
-                        lastColumnIndex = cell.ColumnIndex;
+                        lastColumnIndex = cell.Value.ColumnIndex;
                     }
                 }
             }

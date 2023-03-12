@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Expected-XML\ShouldAddCellsinColumnsAfterZ.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Expected-XML\ShouldAddCellsInSameRow.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
