@@ -24,10 +24,8 @@ namespace EZSpreadsheet.Tests
             var wb = new EZWorkbook(memoryStream);
             wb.Save();         
 
-            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldGenerateWorkbook";
-            TestHelper.AssertXml($@"{expectedXmlFolder}/workbook.xml", "xl/workbook.xml", memoryStream);
-            TestHelper.AssertXml($@"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);
-            TestHelper.AssertXml($@"{expectedXmlFolder}/styles.xml", "xl/styles.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldGenerateWorkbook.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -39,9 +37,8 @@ namespace EZSpreadsheet.Tests
             wb.AddSheet("sheet2");
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddworksheets.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet2.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldAddworksheets.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]

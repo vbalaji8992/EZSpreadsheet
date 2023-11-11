@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -28,51 +28,46 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Expected-XML\ShouldAddCellsinColumnsAfterZ.xml">
+    <None Update="ExpectedFiles\ShouldAddCellsinColumnsAfterZ.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldAddCellsInSameRow.xml">
+    <None Update="ExpectedFiles\ShouldAddCellsInSameColumn.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldAddCellsInSameColumn.xml">
+    <None Update="ExpectedFiles\ShouldAddCellsInSameRow.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldAddRangeOfCells.xml">
+    <None Update="ExpectedFiles\ShouldAddRangeOfCells.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldAddworksheets.xml">
+    <None Update="ExpectedFiles\ShouldAddworksheets.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldConvertTextToNumber.xml">
+    <None Update="ExpectedFiles\ShouldConvertTextToNumber.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldGenerateWorkbook\sharedStrings.xml">
+    <None Update="ExpectedFiles\ShouldGenerateWorkbook.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldGenerateWorkbook\styles.xml">
+    <None Update="ExpectedFiles\ShouldNotDuplicateValuesInSharedString.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldGenerateWorkbook\workbook.xml">
+    <None Update="ExpectedFiles\ShouldRandomlyAddCells.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldNotDuplicateValuesInSharedString\sharedStrings.xml">
+    <None Update="ExpectedFiles\ShouldSetFontToCell.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldNotDuplicateValuesInSharedString\sheet1.xml">
+    <None Update="ExpectedFiles\ShouldSetIntegerValues.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldRandomlyAddCells.xml">
+    <None Update="ExpectedFiles\ShouldSetValueAsStringInCell.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Expected-XML\ShouldSetIntegerValues.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Expected-XML\ShouldSetValueAsStringInCell\sharedStrings.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Expected-XML\ShouldSetValueAsStringInCell\sheet1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ExpectedFiles\" />
   </ItemGroup>
 
 </Project>

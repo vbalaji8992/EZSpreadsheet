@@ -22,9 +22,8 @@ namespace EZSpreadsheet.Tests
             ws.GetCell(1, 1).SetValue("Text1");
             wb.Save();
 
-            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldSetValueAsStringInCell";
-            TestHelper.AssertXml($"{expectedXmlFolder}/sheet1.xml", "xl/worksheets/sheet1.xml", memoryStream);            
-            TestHelper.AssertXml($"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);            
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldSetValueAsStringInCell.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -36,9 +35,8 @@ namespace EZSpreadsheet.Tests
             ws.GetCell(1, 1).SetValue<string?>("Text1");
             wb.Save();
 
-            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldSetValueAsStringInCell";
-            TestHelper.AssertXml($"{expectedXmlFolder}/sheet1.xml", "xl/worksheets/sheet1.xml", memoryStream);
-            TestHelper.AssertXml($"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldSetValueAsStringInCell.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -52,9 +50,8 @@ namespace EZSpreadsheet.Tests
             ws.GetCell(2, 2).SetValue("Text1");
             wb.Save();
 
-            var expectedXmlFolder = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldNotDuplicateValuesInSharedString";
-            TestHelper.AssertXml($"{expectedXmlFolder}/sheet1.xml", "xl/worksheets/sheet1.xml", memoryStream);
-            TestHelper.AssertXml($"{expectedXmlFolder}/sharedStrings.xml", "xl/sharedStrings.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldNotDuplicateValuesInSharedString.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -71,8 +68,8 @@ namespace EZSpreadsheet.Tests
             ws.GetCell(1, 6).SetValue<float?>(78.90f);
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldSetIntegerValues.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldSetIntegerValues.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -85,8 +82,8 @@ namespace EZSpreadsheet.Tests
             ws.GetCell(1, 2).SetValue("12.34").ConvertToNumber();
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldConvertTextToNumber.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldConvertTextToNumber.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]

@@ -60,8 +60,8 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddCellsInSameColumn.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldAddCellsInSameColumn.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -82,8 +82,8 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddCellsInSameColumn.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldAddCellsInSameColumn.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -101,8 +101,8 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddCellsInSameRow.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldAddCellsInSameRow.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -120,8 +120,8 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldRandomlyAddCells.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldRandomlyAddCells.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -137,8 +137,8 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddCellsinColumnsAfterZ.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldAddCellsinColumnsAfterZ.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -154,9 +154,8 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddRangeOfCells.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet2.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldAddRangeOfCells.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]
@@ -172,9 +171,8 @@ namespace EZSpreadsheet.Tests
 
             wb.Save();
 
-            var expectedXmlFile = $@"{TestHelper.EXPECTED_XML_FOLDER}/ShouldAddRangeOfCells.xml";
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet1.xml", memoryStream);
-            TestHelper.AssertXml(expectedXmlFile, "xl/worksheets/sheet2.xml", memoryStream);
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldAddRangeOfCells.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 
         [Fact]

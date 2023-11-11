@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Vml.Office;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestPlatform.Utilities;
 using System;
 using System.Collections.Generic;
@@ -7,13 +8,14 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace EZSpreadsheet.Tests
 {
     public static class TestHelper
     {
-        public const string EXPECTED_XML_FOLDER = "Expected-XML";
+        public const string EXPECTED_FILES_FOLDER = "ExpectedFiles";
 
         public static string GetFormattedXml(string xml)
         {
@@ -23,21 +25,37 @@ namespace EZSpreadsheet.Tests
                 .Replace(" ", "");
         }
 
-        public static void AssertXml(string expectedXmlPath, string actualXmlPath, Stream stream)
+        public static void AssertSpreadsheet(Stream actualFileStream, string expectedFilePath)
         {
-            var archive = new ZipArchive(stream);
-            var actualFile = archive.Entries.Where(x => x.FullName == actualXmlPath).FirstOrDefault();
+            using var expectedArchive = ZipFile.OpenRead(expectedFilePath);
+            var ignoredFiles = new List<string>()
+            {
+                "_rels/.rels",
+                "xl/_rels/workbook.xml.rels",
+                "xl/workbook.xml"
+            };
+            var expectedXmlFiles = expectedArchive.Entries.Where(x => !ignoredFiles.Contains(x.FullName));
 
-            if (actualFile == null)
-                throw new XunitException("Zip file does not contain the specified file");
+            using var actualArchive = new ZipArchive(actualFileStream);
 
-            var reader = new StreamReader(actualFile.Open());
-            var actualXml = reader.ReadToEnd();
+            foreach (var file in expectedXmlFiles)
+            {
+                var actualFile = actualArchive.Entries.Where(x => x.FullName == file.FullName).FirstOrDefault();
 
-            var expectedXmlFormatted = GetFormattedXml(File.ReadAllText(expectedXmlPath));
-            var actualXmlFormatted = GetFormattedXml(actualXml);
+                if (actualFile == null)
+                    throw new XunitException("Zip file does not contain the specified file");
 
-            Assert.Equal(expectedXmlFormatted, actualXmlFormatted);
+                var expectedXmlFormatted = ReadArchiveFile(file);
+                var actualXmlFormatted = ReadArchiveFile(actualFile);
+
+                Assert.Equal(expectedXmlFormatted, actualXmlFormatted);
+            }
+        }
+
+        private static string ReadArchiveFile(ZipArchiveEntry file)
+        {
+            var reader = new StreamReader(file.Open());
+            return reader.ReadToEnd();
         }
     }
 }
