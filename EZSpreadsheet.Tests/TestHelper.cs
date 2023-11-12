@@ -25,8 +25,11 @@ namespace EZSpreadsheet.Tests
                 .Replace(" ", "");
         }
 
-        public static void AssertSpreadsheet(Stream actualFileStream, string expectedFilePath)
+        public static void AssertSpreadsheet(Stream actualFileStream, string expectedFilePath, bool saveTestFile = false)
         {
+            if (saveTestFile)
+                SaveTestGeneratedFile(actualFileStream, expectedFilePath.Split("/")[1]);
+
             using var expectedArchive = ZipFile.OpenRead(expectedFilePath);
             var ignoredFiles = new List<string>()
             {
@@ -56,6 +59,25 @@ namespace EZSpreadsheet.Tests
         {
             var reader = new StreamReader(file.Open());
             return reader.ReadToEnd();
+        }
+
+        private static void SaveTestGeneratedFile(Stream testFileStream, string outputFileName)
+        {
+            string destFileName = $"ActualFiles/{outputFileName}";
+            if (File.Exists(destFileName)) 
+                File.Delete(destFileName);
+            
+            using var destArchive = ZipFile.Open(destFileName, ZipArchiveMode.Create);
+
+            using var sourceArchive = new ZipArchive(testFileStream, ZipArchiveMode.Read, true);
+
+            foreach (var entry in sourceArchive.Entries)
+            {
+                using var existinFileStream = entry.Open();
+                var newFile = destArchive.CreateEntry(entry.FullName);
+                using var newFileStream = newFile.Open();
+                existinFileStream.CopyTo(newFileStream);
+            }
         }
     }
 }

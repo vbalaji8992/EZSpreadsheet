@@ -95,10 +95,26 @@ namespace EZSpreadsheet.Style
         {
             var border = new Border();
 
-            LeftBorder leftBorder = new LeftBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
-            RightBorder rightBorder = new RightBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
-            TopBorder topBorder = new TopBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
-            BottomBorder bottomBorder = new BottomBorder() { Style = (BorderStyleValues)cellStyle.BorderType };
+            LeftBorder leftBorder = new LeftBorder() 
+            { 
+                Style = (BorderStyleValues)cellStyle.BorderType, 
+                Color = new Color() { Indexed = (uint)cellStyle.BorderColor } 
+            };
+            RightBorder rightBorder = new RightBorder()
+            {
+                Style = (BorderStyleValues)cellStyle.BorderType,
+                Color = new Color() { Indexed = (uint)cellStyle.BorderColor }
+            };
+            TopBorder topBorder = new TopBorder()
+            {
+                Style = (BorderStyleValues)cellStyle.BorderType,
+                Color = new Color() { Indexed = (uint)cellStyle.BorderColor }
+            };
+            BottomBorder bottomBorder = new BottomBorder()
+            {
+                Style = (BorderStyleValues)cellStyle.BorderType,
+                Color = new Color() { Indexed = (uint)cellStyle.BorderColor }
+            };
 
             border.Append(leftBorder);
             border.Append(rightBorder);

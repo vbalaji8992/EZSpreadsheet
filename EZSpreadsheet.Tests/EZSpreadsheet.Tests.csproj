@@ -28,46 +28,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ExpectedFiles\ShouldAddCellsinColumnsAfterZ.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldAddCellsInSameColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldAddCellsInSameRow.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldAddRangeOfCells.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldAddworksheets.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldConvertTextToNumber.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldGenerateWorkbook.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldNotDuplicateValuesInSharedString.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldRandomlyAddCells.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldSetFontToCell.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldSetIntegerValues.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ExpectedFiles\ShouldSetValueAsStringInCell.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Folder Include="ExpectedFiles\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ExpectedFiles\" />
+    <None Update="ExpectedFiles\*.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
