@@ -63,7 +63,10 @@ namespace EZSpreadsheet.Tests
 
         private static void SaveTestGeneratedFile(Stream testFileStream, string outputFileName)
         {
-            string destFileName = $"ActualFiles/{outputFileName}";
+            if (!Directory.Exists("TestGeneratedFiles"))
+                return;
+
+            string destFileName = $"TestGeneratedFiles/{outputFileName}";
             if (File.Exists(destFileName)) 
                 File.Delete(destFileName);
             

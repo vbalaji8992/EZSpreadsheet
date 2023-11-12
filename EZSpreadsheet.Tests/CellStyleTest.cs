@@ -188,7 +188,7 @@ namespace EZSpreadsheet.Tests
             wb.Save();
 
             var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldApplyStylesToRangeOfCells.xlsx";
-            TestHelper.AssertSpreadsheet(memoryStream, expectedFile, true);
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
     }
 }
