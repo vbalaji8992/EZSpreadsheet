@@ -147,5 +147,48 @@ namespace EZSpreadsheet.Tests
             var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldFormatNumbers.xlsx";
             TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
+
+        [Fact]
+        public void ShouldApplyMultipleStylesToCell()
+        {
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            var ws = wb.AddSheet("sheet1");
+            EZStyle cellStyle = new EZStyle 
+            {
+                Font = EZFont.Arial,
+                FontColor = EZColor.Red,
+                FontSize = 8,
+                IsBold = true,
+                BorderType = EZBorder.Thin,
+                BorderColor = EZColor.Black,
+                FillColor = EZColor.Yellow,
+                NumberFormatId = 1 
+            };
+            ws.GetCell(2, 2).SetValue(123).SetStyle(cellStyle);
+            wb.Save();
+
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldApplyMultipleStylesToCell.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
+        }
+
+        [Fact]
+        public void ShouldApplyStylesToRangeOfCells()
+        {
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            var ws = wb.AddSheet("sheet1");
+            EZStyle cellStyle = new EZStyle
+            {
+                BorderType = EZBorder.Thin,
+                BorderColor = EZColor.Black,
+                FillColor = EZColor.Yellow
+            };
+            ws.GetRange("b2", "f5").SetStyle(cellStyle);
+            wb.Save();
+
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldApplyStylesToRangeOfCells.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile, true);
+        }
     }
 }
