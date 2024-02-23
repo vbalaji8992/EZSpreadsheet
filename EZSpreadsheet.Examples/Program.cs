@@ -2,59 +2,60 @@
 using EZSpreadsheet;
 using EZSpreadsheet.Style;
 
-EZWorkbook workbook = new("EzBook.xlsx");
-var worksheet = workbook.AddSheet("EZ");
+// Create new workbook in the path
+EZWorkbook workbook = new("Output/EzBook.xlsx");
 
-List<Data> list = new List<Data>();
+// Create new worksheet
+EZWorksheet worksheet = workbook.AddSheet("EzSheet");
 
-for (uint i = 1; i < 10; i++)
+// Set content of cell A1 as string
+worksheet.GetCell(1, 1).SetValue("Heading");
+
+// Set content of cell A2 as integer
+worksheet.GetCell("A2").SetValue(123);
+
+// Set content of cell A3 as decimal/double
+worksheet.GetCell("A", 3).SetValue(12.34);
+
+// Set content of cell A4 as decimal/double and as per given format Id (Refer the below link to look-up format Ids)
+// https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.spreadsheet.numberingformat
+worksheet.GetCell("A4")
+    .SetValue(12.3456)
+    .SetStyle(new EZStyle { NumberFormatId = 2 });
+
+// Set formula of cell A5 
+worksheet.GetCell("A5").SetFormula("SUM(A2:A4)");
+
+// Set content of cell A7 as string and with the given fill and font color
+worksheet.GetCell("A7")
+    .SetValue("Numbers")
+    .SetStyle(new EZStyle { FillColor = EZColor.Yellow, FontColor = EZColor.Red });
+
+// Insert list of integers starting from cell A8
+// The method will return the cell range in which the list was inserted
+var list1 = new List<int> { 1, 2, 3 };
+var range = worksheet.GetCell("a8").InsertData(list1);
+// Fill the above range with the given color
+range.SetStyle(new EZStyle { FillColor = EZColor.Pink });
+
+
+// Create a list of integers of type Data
+var list2 = new List<Data>();
+for (uint i = 1; i <= 5; i++)
 {
-    list.Add(new Data()
+    list2.Add(new Data()
     {
         Prop1 = new Random().Next(100),
         Prop2 = new Random().Next(100),
         Prop3 = new Random().Next(100)
     });
 }
-worksheet.GetCell("b2")
-    .InsertData(list, true)
-    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.TimesNewRoman });
+// Create a style object with custom border and font
+var tableStyle = new EZStyle { BorderType = EZBorder.Thin, Font = EZFont.TimesNewRoman };
+// Insert the above list with property name as heading and apply the above style
+range = worksheet.GetCell("A12")
+    .InsertData(list2, true)
+    .SetStyle(tableStyle);
 
-worksheet.GetCell("f6")
-    .SetFormula("SUM(B3:D11)");
-
-worksheet.GetCell("f2")
-    .SetFormula("CONCATENATE(B2,C2,D2)");
-
-worksheet.GetRange("j11", "e2").SetStyle(new EZStyle { FillColor = EZColor.Pink });
-
-worksheet.GetCell("a", 13)
-    .SetValue<int?>(123);
-
-worksheet.GetCell("a", 14)
-    .SetValue<int?>(123)
-    .SetStyle(new EZStyle { NumberFormatId = 2 });
-
-worksheet.GetCell("a", 15)
-    .SetValue<double?>(12.345678)
-    .SetStyle(new EZStyle { NumberFormatId = 2 });
-
-worksheet.GetCell("a", 16)
-    .SetValue<double?>(12.345678)
-    .SetStyle(new EZStyle { FillColor = EZColor.Green, NumberFormatId = 2, Font = EZFont.Arial });
-
-worksheet.GetCell("a", 17)
-    .SetValue<string?>(null)
-    .SetStyle(new EZStyle { BorderType = EZBorder.Thin, FillColor = EZColor.Yellow, Font = EZFont.Century, FontSize = 50 });
-
+// Save the workbook
 workbook.Save();
-
-Console.WriteLine("Done");
-Console.ReadLine();
-
-class Data
-{
-    public int? Prop1 { get; set; }
-    public int Prop2 { get; set; }
-    public int Prop3 { get; set; }
-}
