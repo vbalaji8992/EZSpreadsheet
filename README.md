@@ -7,6 +7,17 @@ To include this library in your project, search for `EZSpreadsheet` in Visual St
 **NuGet link**
 https://www.nuget.org/packages/EZSpreadsheet/
 
+## Features
+
+ - [x] Add text, number and formula
+ - [x] Format text and number
+ - [x] Insert list of primitives
+ - [x] Insert list of objects
+ - [x] Apply styling to cells
+ - [ ] Merge cells
+ - [ ] Align content
+ - [ ] Create charts
+
 ## Usage
 Sample C# code
 
@@ -23,4 +34,3 @@ Sample C# code
     workbook.Save();
     
 Refer file `Program.cs` in the folder `EZSpreadsheet.Examples` for more examples.
-
