@@ -9,14 +9,17 @@ https://www.nuget.org/packages/EZSpreadsheet/
 
 ## Features
 
+ - [x] Create spreadsheet
  - [x] Add text, number and formula
  - [x] Format text and number
  - [x] Insert list of primitives
  - [x] Insert list of objects
  - [x] Apply styling to cells
- - [ ] Merge cells
  - [ ] Align content
+ - [ ] Merge cells
+ - [ ] Set row height and column width
  - [ ] Create charts
+ - [ ] Open and edit spreadsheet
 
 ## Usage
 Sample C# code
@@ -33,4 +36,5 @@ Sample C# code
     // Save workbook
     workbook.Save();
     
-Refer file `Program.cs` in the folder `EZSpreadsheet.Examples` for more examples.
+More examples here
+[Wiki](https://github.com/vbalaji8992/EZSpreadsheet/wiki)
