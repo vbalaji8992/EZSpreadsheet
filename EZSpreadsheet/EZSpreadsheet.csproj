@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <PackageId>EZSpreadsheet</PackageId>
     <Title>EZSpreadsheet</Title>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Product>EZSpreadsheet</Product>
     <Company>EZSpreadsheet</Company>
     <Authors>vbalaji8992</Authors>
@@ -14,7 +14,7 @@
     <PackageTags>Excel;Spreadsheet;xlsx;OpenXml</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Description>Easy-to-use Spreadsheet library</Description>
+    <Description>Easy-to-use spreadsheet library</Description>
   </PropertyGroup>
 
   <ItemGroup>
