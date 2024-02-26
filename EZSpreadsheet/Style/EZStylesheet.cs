@@ -1,11 +1,6 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace EZSpreadsheet.Style
 {
@@ -80,7 +75,7 @@ namespace EZSpreadsheet.Style
             fonts.Append(new Font()
             {
                 FontSize = new FontSize() { Val = cellStyle.FontSize },
-                Color = new Color() { Indexed = (uint)cellStyle.FontColor },
+                Color = new Color() { Rgb = new HexBinaryValue() { Value = cellStyle.FontColor } },
                 FontName = new FontName() { Val = cellStyle.Font.ToString() },
                 Bold = cellStyle.IsBold ? new Bold() : null,
                 Italic = cellStyle.IsItalic ? new Italic() : null,
@@ -98,22 +93,22 @@ namespace EZSpreadsheet.Style
             LeftBorder leftBorder = new LeftBorder() 
             { 
                 Style = (BorderStyleValues)cellStyle.BorderType, 
-                Color = new Color() { Indexed = (uint)cellStyle.BorderColor } 
+                Color = new Color() { Rgb = new HexBinaryValue() { Value = cellStyle.BorderColor } } 
             };
             RightBorder rightBorder = new RightBorder()
             {
                 Style = (BorderStyleValues)cellStyle.BorderType,
-                Color = new Color() { Indexed = (uint)cellStyle.BorderColor }
+                Color = new Color() { Rgb = new HexBinaryValue() { Value = cellStyle.BorderColor } }
             };
             TopBorder topBorder = new TopBorder()
             {
                 Style = (BorderStyleValues)cellStyle.BorderType,
-                Color = new Color() { Indexed = (uint)cellStyle.BorderColor }
+                Color = new Color() { Rgb = new HexBinaryValue() { Value = cellStyle.BorderColor } }
             };
             BottomBorder bottomBorder = new BottomBorder()
             {
                 Style = (BorderStyleValues)cellStyle.BorderType,
-                Color = new Color() { Indexed = (uint)cellStyle.BorderColor }
+                Color = new Color() { Rgb = new HexBinaryValue() { Value = cellStyle.BorderColor } }
             };
 
             border.Append(leftBorder);
@@ -148,7 +143,7 @@ namespace EZSpreadsheet.Style
                     PatternFill = new PatternFill()
                     {
                         PatternType = PatternValues.Solid,
-                        ForegroundColor = new ForegroundColor() { Indexed = (uint)cellStyle.FillColor }
+                        ForegroundColor = new ForegroundColor() { Rgb = new HexBinaryValue() { Value = cellStyle.FillColor } }
                     }
                 });
                 fills.Count = (uint)fills.ChildElements.Count;

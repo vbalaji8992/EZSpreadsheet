@@ -1,10 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EZSpreadsheet.Style;
+﻿using EZSpreadsheet.Style;
 
 namespace EZSpreadsheet.Tests
 {
@@ -36,9 +30,9 @@ namespace EZSpreadsheet.Tests
             var memoryStream = new MemoryStream();
             var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
-            ws.GetCell(1, 1).SetValue("Text1").SetStyle(new EZStyle { FontColor = EZColor.Red });
-            ws.GetCell(2, 1).SetValue(12345).SetStyle(new EZStyle { FontColor = EZColor.Green });
-            ws.GetCell(3, 1).SetValue(123.45).SetStyle(new EZStyle { FontColor = EZColor.Blue });
+            ws.GetCell(1, 1).SetValue("Text1").SetStyle(new EZStyle { FontColor = "#FF0800" });
+            ws.GetCell(2, 1).SetValue(12345).SetStyle(new EZStyle { FontColor = "#17FF00" });
+            ws.GetCell(3, 1).SetValue(123.45).SetStyle(new EZStyle { FontColor = "#0042FF" });
             wb.Save();
 
             var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldSetFontColor.xlsx";
@@ -111,8 +105,8 @@ namespace EZSpreadsheet.Tests
             var memoryStream = new MemoryStream();
             var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
-            ws.GetCell(1, 1).SetStyle(new EZStyle { BorderType = EZBorder.Thin, BorderColor = EZColor.Black });
-            ws.GetCell(3, 1).SetStyle(new EZStyle { BorderType = EZBorder.Thick, BorderColor = EZColor.Red });
+            ws.GetCell(1, 1).SetStyle(new EZStyle { BorderType = EZBorder.Thin, BorderColor = "#000000" });
+            ws.GetCell(3, 1).SetStyle(new EZStyle { BorderType = EZBorder.Thick, BorderColor = "#FF0800" });
             wb.Save();
 
             var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShoulSetCellBorderWithColor.xlsx";
@@ -125,8 +119,8 @@ namespace EZSpreadsheet.Tests
             var memoryStream = new MemoryStream();
             var wb = new EZWorkbook(memoryStream);
             var ws = wb.AddSheet("sheet1");
-            ws.GetCell(1, 1).SetStyle(new EZStyle { FillColor = EZColor.Yellow });
-            ws.GetCell(3, 1).SetStyle(new EZStyle { FillColor = EZColor.Pink });
+            ws.GetCell(1, 1).SetStyle(new EZStyle { FillColor = "#ECFF00" });
+            ws.GetCell(3, 1).SetStyle(new EZStyle { FillColor = "#FF00EC" });
             wb.Save();
 
             var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShoulFillCellWithColor.xlsx";
@@ -157,13 +151,37 @@ namespace EZSpreadsheet.Tests
             EZStyle cellStyle = new EZStyle 
             {
                 Font = EZFont.Arial,
-                FontColor = EZColor.Red,
+                FontColor = "#FF0800",
                 FontSize = 8,
                 IsBold = true,
                 BorderType = EZBorder.Thin,
-                BorderColor = EZColor.Black,
-                FillColor = EZColor.Yellow,
+                BorderColor = "#000000",
+                FillColor = "#ECFF00",
                 NumberFormatId = 1 
+            };
+            ws.GetCell(2, 2).SetValue(123).SetStyle(cellStyle);
+            wb.Save();
+
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldApplyMultipleStylesToCell.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
+        }
+
+        [Fact]
+        public void ColorCodesShouldBeCaseInsensitive()
+        {
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            var ws = wb.AddSheet("sheet1");
+            EZStyle cellStyle = new EZStyle
+            {
+                Font = EZFont.Arial,
+                FontColor = "#ff0800",
+                FontSize = 8,
+                IsBold = true,
+                BorderType = EZBorder.Thin,
+                BorderColor = "#000000",
+                FillColor = "#ecff00",
+                NumberFormatId = 1
             };
             ws.GetCell(2, 2).SetValue(123).SetStyle(cellStyle);
             wb.Save();
@@ -181,13 +199,32 @@ namespace EZSpreadsheet.Tests
             EZStyle cellStyle = new EZStyle
             {
                 BorderType = EZBorder.Thin,
-                BorderColor = EZColor.Black,
-                FillColor = EZColor.Yellow
+                BorderColor = "#000000",
+                FillColor = "#ECFF00"
             };
             ws.GetRange("b2", "f5").SetStyle(cellStyle);
             wb.Save();
 
             var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldApplyStylesToRangeOfCells.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
+        }
+
+        [Fact]
+        public void ShouldNotApplyColorForInvalidColorCodes()
+        {
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            var ws = wb.AddSheet("sheet1");
+            EZStyle cellStyle = new EZStyle
+            {
+                BorderType = EZBorder.Thin,
+                BorderColor = "#123ABC123",
+                FillColor = "#ABC123ABC"
+            };
+            ws.GetRange("b2", "f5").SetStyle(cellStyle);
+            wb.Save();
+
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldNotApplyColorForInvalidColorCode.xlsx";
             TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
     }

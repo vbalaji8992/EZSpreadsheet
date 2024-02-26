@@ -30,7 +30,7 @@ worksheet.GetCell("A5").SetFormula("SUM(A2:A4)");
 // Set content of cell A7 as string and with the given fill and font color
 worksheet.GetCell("A7")
     .SetValue("Numbers")
-    .SetStyle(new EZStyle { FillColor = EZColor.Yellow, FontColor = EZColor.Red });
+    .SetStyle(new EZStyle { FillColor = "#FFFF00", FontColor = "#FF0000" });
 
 // Insert list of integers starting from cell A8
 var list1 = new List<int> { 1, 2, 3 };
