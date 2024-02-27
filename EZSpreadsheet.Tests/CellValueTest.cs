@@ -133,6 +133,24 @@ namespace EZSpreadsheet.Tests
         }
 
         [Fact]
+        public void ShouldInsertTransposed1DListOfNumbers()
+        {
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            var ws = wb.AddSheet("sheet1");
+
+            var list = new List<uint>();
+            for (uint i = 1; i <= 10; i++)
+                list.Add(i);
+
+            ws.GetCell(2, 2).InsertData(list, new EZListOptions { TransposeData = true });
+            wb.Save();
+
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldInsertTransposed1DListOfNumbers.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
+        }
+
+        [Fact]
         public void ShouldInsert2DList()
         {
             var memoryStream = new MemoryStream();
@@ -177,10 +195,36 @@ namespace EZSpreadsheet.Tests
                 Tuple.Create("Judith", 84.3, 9)
             };
 
-            ws.GetCell(2, 2).InsertData(list, true);
+            ws.GetCell(2, 2).InsertData(list, new EZListOptions { AddPropertyNameAsHeading = true });
             wb.Save();
 
             var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldInsert2DListWithPropertyNameAsHeading.xlsx";
+            TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
+        }
+
+        [Fact]
+        public void ShouldInsertTransposed2DListWithPropertyNameAsHeading()
+        {
+            var memoryStream = new MemoryStream();
+            var wb = new EZWorkbook(memoryStream);
+            var ws = wb.AddSheet("sheet1");
+
+            var list = new List<Tuple<string, double, int>>()
+            {
+                Tuple.Create("Jack", 78.8, 8),
+                Tuple.Create("Abbey", 92.1, 9),
+                Tuple.Create("Dave", 88.3, 9),
+                Tuple.Create("Sam", 91.7, 8),
+                Tuple.Create("Ed", 71.2, 5),
+                Tuple.Create("Penelope", 82.9, 8),
+                Tuple.Create("Linda", 99.0, 9),
+                Tuple.Create("Judith", 84.3, 9)
+            };
+
+            ws.GetCell(2, 2).InsertData(list, new EZListOptions { AddPropertyNameAsHeading = true, TransposeData = true });
+            wb.Save();
+
+            var expectedFile = $@"{TestHelper.EXPECTED_FILES_FOLDER}/ShouldInsertTransposed2DListWithPropertyNameAsHeading.xlsx";
             TestHelper.AssertSpreadsheet(memoryStream, expectedFile);
         }
 

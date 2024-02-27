@@ -2,11 +2,6 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using EZSpreadsheet.Style;
 using EZSpreadsheet.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZSpreadsheet
 {
@@ -128,35 +123,47 @@ namespace EZSpreadsheet
             return this;
         }
 
-        public EZRange InsertData<T>(List<T> data, bool includePropNameAsHeading = false)
+        public EZRange InsertData<T>(IEnumerable<T> data, EZListOptions? listOptions = null)
         {
+            if (listOptions == null)
+                listOptions = new EZListOptions();
+
             if (typeof(T).IsValueType || typeof(T) == typeof(string))
             {
-                return InsertValueType(data);                
+                return InsertValueType(data, listOptions!.TransposeData);                
             }
 
             uint currentRow = RowIndex;
+            uint currentColumn = ColumnIndex;
 
             var props = typeof(T).GetProperties();
 
             EZRange range = new EZRange(Worksheet, new List<EZCell>());
 
-            if (includePropNameAsHeading)
+            bool doNotTranspose = !listOptions!.TransposeData;
+
+            if (listOptions!.AddPropertyNameAsHeading)
             {
                 var propNames = props.Select(prop => prop.Name).ToList();
-                range = InsertValueType(propNames, true);
-                currentRow++;
+                range = InsertValueType(propNames, doNotTranspose);
+                if (doNotTranspose)
+                    currentRow++;
+                else
+                    currentColumn++;
             }
 
             foreach (var item in data)
             {
-                uint currentColumn = ColumnIndex;
+                if (doNotTranspose)
+                    currentColumn = ColumnIndex;
+                else
+                    currentRow = RowIndex;
 
                 foreach (var prop in props)
                 {
                     var propInfo = item?.GetType().GetProperty(prop.Name);
                     var type = propInfo?.PropertyType;
-                    var value = propInfo?.GetValue(item);                    
+                    var value = propInfo?.GetValue(item);
                     var currentCell = Worksheet.GetCell(currentRow, currentColumn);
 
                     if (value != null && type != null)
@@ -165,16 +172,23 @@ namespace EZSpreadsheet
                         currentCell.SetValue("null");
 
                     range.CellList.Add(currentCell);
-                    currentColumn++;
+
+                    if (doNotTranspose)
+                        currentColumn++;
+                    else
+                        currentRow++;
                 }
 
-                currentRow++;
+                if (doNotTranspose)
+                    currentRow++;
+                else
+                    currentColumn++;
             }
 
             return range;
         }
 
-        private EZRange InsertValueType<T>(List<T> data, bool transposeData = false)
+        private EZRange InsertValueType<T>(IEnumerable<T> data, bool transposeData)
         {
             var currentRow = RowIndex;
             var currentColumn = ColumnIndex;
@@ -188,13 +202,9 @@ namespace EZSpreadsheet
                 cellList.Add(currentCell);
 
                 if (transposeData)
-                {
                     currentColumn++;
-                }
                 else
-                {
                     currentRow++;
-                }
             }
 
             return new EZRange(Worksheet, cellList);
